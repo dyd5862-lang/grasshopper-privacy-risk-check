@@ -1,0 +1,13 @@
+node_modules/
+.next/
+dist/
+.vercel/
+.openai/
+.sites-runtime/
+.wrangler/
+*.log
+*.zip
+*.tar.gz
+.env
+.env.*
+!.env.example
