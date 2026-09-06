@@ -940,13 +940,13 @@ export default function Home() {
             <div className="section-heading">
               <span className="section-kicker">점검 흐름</span>
               <h2>체크리스트를 넘어,<br />개선계획까지 이어집니다</h2>
-              <p>안내서의 점검표 원문과 해설을 실무자가 바로 사용할 수 있는 순서로 구성했습니다.</p>
+              <p>안내서의 점검표 원문과 해설을 실무자가 바로 확인할 수 있도록 구성했습니다.</p>
             </div>
             <div className="process-grid">
               {[
                 ["01", "대상 확인", "고유식별정보, 저장 위치와 암호화 현황을 먼저 확인합니다."],
                 ["02", "보호조치 점검", "기관 11개, 시스템 15개 원문 항목에 답하고 증적을 기록합니다."],
-                ["03", "자동 판정", "미흡, 확인 필요, 증적 미확인을 서로 다르게 분류합니다."],
+                ["03", "자동 판정", "충족, 미흡, 추가 확인 등으로 구분하여 안내합니다."],
                 ["04", "결과보고서", "법적 근거와 개선 우선순위를 포함한 보고서를 인쇄합니다."],
               ].map(([number, title, body]) => (
                 <article key={number} className="process-card"><span>{number}</span><h3>{title}</h3><p>{body}</p></article>
