@@ -923,7 +923,11 @@ export default function Home() {
             <div className="hero-panel mascot-hero" aria-label="체크리스트를 점검하는 메뚜기 안내자">
               <div className="mascot-orbit" />
               <Image src="/images/grasshopper-hero.webp" alt="체크리스트와 돋보기를 든 전문적인 메뚜기 안내자" width={1254} height={1254} priority />
-              <div className="mascot-caption"><span>🦗 메뚜기 도움말</span><b>어려운 보호조치도 한 항목씩<br />근거와 함께 확인해 드립니다.</b></div>
+              <div className="mascot-caption">
+                <span>🦗 메뚜기 도움말</span>
+                <b>어려운 보호조치도 한 항목씩<br />근거와 함께 확인해 드립니다.</b>
+                <small>개인이 제작한 비공식 참고 도구이며, 개인정보보호위원회가 운영하거나 보증하는 서비스가 아닙니다.</small>
+              </div>
               <span className="floating-note note-one"><b>26개 점검항목</b><small>기관 11 · 시스템 15</small></span>
               <span className="floating-note note-two"><b>공식자료 연계</b><small>법령 · 안내서 · 처분사례</small></span>
             </div>
