@@ -23,3 +23,4 @@ jobs:
       - run: npm test
       - run: npm run test:data
       - run: npm run build:vercel
+      - run: npm run test:render

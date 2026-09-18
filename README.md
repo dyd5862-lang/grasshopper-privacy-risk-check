@@ -60,23 +60,32 @@ npm run dev
 Vercel과 동일한 Next.js production build를 로컬에서 확인하려면 다음과 같이 실행할 수 있습니다.
 
 ```bash
-VERCEL=1 npm run build
+npm run build
 ```
 
 Windows PowerShell:
 
 ```powershell
-$env:VERCEL="1"; npm run build
+npm run build
 ```
+
+## 자동검사
+
+```bash
+npm ci
+npm run lint
+npm run typecheck
+npm test
+npm run test:data
+npm run build
+npm run test:render
+```
+
+GitHub Actions는 Node.js 22.13.0에서 같은 검사를 수행합니다. 환경변수·호스팅 메타데이터·DB·API 키가 필요하지 않습니다. `npm test`는 판정·날짜·저장/복원·보고서·검색·법령 링크 및 데이터 무결성을 검사하고, `test:render`는 Next.js 빌드 결과의 HTML을 검사합니다. 실제 브라우저 동작 확인은 별도로 수행해야 합니다.
 
 ## Vercel 배포
 
-1. 이 저장소를 자신의 GitHub 계정으로 Fork하거나 복제합니다.
-2. Vercel에서 새 프로젝트를 만들고 해당 GitHub 저장소를 선택합니다.
-3. Framework Preset이 `Next.js`로 인식되는지 확인합니다.
-4. 저장소 루트가 프로젝트 루트라면 Root Directory는 비워 둡니다.
-5. Build Command는 `npm run build`를 사용합니다.
-6. 배포 전에 자신의 환경과 공개 범위를 다시 확인합니다.
+운영 서비스는 기존 `grasshopper-privacy-risk-check` Vercel 프로젝트를 사용합니다. 이 저장소의 변경을 배포할 때 새 프로젝트를 만들지 않고 기존 프로젝트의 연결 저장소·브랜치와 배포 결과를 확인합니다. Framework는 Next.js, Build Command는 `npm run build`입니다.
 
 이 공개본에는 원 운영 프로젝트의 `.vercel` 연결정보, `.openai` 호스팅 메타데이터 및 로컬 Production 배포용 스크립트를 포함하지 않습니다.
 
@@ -88,10 +97,12 @@ $env:VERCEL="1"; npm run build
 
 ## 프로젝트 구조
 
-- `app/` — 화면, 점검 로직, 사례·의결 데이터
+- `app/` — 페이지 진입점, 레이아웃, 사례·의결 데이터
+- `components/privacy-risk/` — 화면·팝업과 상태 관리 훅
+- `lib/privacy-risk/` — 점검항목, 타입, 판정·날짜·저장·검색·보고서·법령 링크
 - `public/` — 정적 리소스
 - `tests/` — 데이터 무결성 및 렌더링 관련 테스트
-- `scripts/` — 개발·빌드 지원 스크립트
+- `.github/workflows/ci.yml` — main push/PR 자동검사
 
 ## 라이선스와 콘텐츠
 
