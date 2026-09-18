@@ -23,7 +23,7 @@ const caseModule = await loadTypeScript("../app/cases-data.ts", [
     `const historicalCaseRecords = ${JSON.stringify(historicalCaseRecords)};`,
   ],
 ]);
-const decisionModule = await loadTypeScript("../app/decision-data.ts");
+const decisionModule = await loadTypeScript("../app/decision-data.ts", [['import { PUBLIC_DECISION_COLLECTED_AT, formatVerifiedDate } from "../lib/privacy-risk/dates";', 'const PUBLIC_DECISION_COLLECTED_AT = "historical"; const formatVerifiedDate = (date) => date;']]);
 
 const caseRecords = caseModule.caseRecords;
 const publicDecisionsByCase = decisionModule.publicDecisionsByCase;

@@ -1,3 +1,5 @@
+import { PUBLIC_DECISION_COLLECTED_AT, formatVerifiedDate } from "../lib/privacy-risk/dates";
+
 export type PublicDecision = {
   decisionNo: string;
   organization: string;
@@ -6,7 +8,7 @@ export type PublicDecision = {
   linkType?: "pdf" | "agenda";
 };
 
-export const publicDecisionCollectedAt = "2026.09.02.";
+export const publicDecisionCollectedAt = formatVerifiedDate(PUBLIC_DECISION_COLLECTED_AT);
 
 export const publicDecisionsByCase: Record<string, PublicDecision[]> = {
   "historic-2020-01": [
