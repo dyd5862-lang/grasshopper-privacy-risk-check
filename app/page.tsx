@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { evaluateAssessment } from "../lib/privacy-risk/evaluation";
 import { CaseRecord, caseRecords, officialCaseSearchUrl } from "./cases-data";
 import { publicDecisionCollectedAt, publicDecisionsByCase } from "./decision-data";
 import { guidePages, guideTitle } from "./guide-pages";
@@ -705,11 +706,13 @@ export default function Home() {
     return base;
   }, [answers, evidence, applicableChecks]);
 
+  const evaluation = evaluateAssessment(counts, applicableChecks.length);
+
   const attentionItems = useMemo(
     () =>
       applicableChecks.filter((item) => {
         const answer = answers[item.id];
-        return answer === "no" || answer === "unknown" || (answer === "yes" && !evidence[item.id]?.length);
+        return !answer || answer === "no" || answer === "unknown" || (answer === "yes" && !evidence[item.id]?.length);
       }),
     [answers, evidence, applicableChecks]
   );
@@ -1212,10 +1215,10 @@ export default function Home() {
             <div className="result-actions"><button className="secondary-button" onClick={exportData}>결과 데이터 저장</button><button className="primary-button" onClick={() => window.print()}><MiniIcon name="file" /> 결과보고서 인쇄</button></div>
           </div>
 
-          <div className={`overall-card ${counts.no > 0 ? "high" : counts.unknown > 0 || counts.evidenceMissing > 0 ? "medium" : "low"}`}>
-            <div className="overall-mascot"><Image src="/images/grasshopper-success.webp" alt="점검 완료 문서와 방패를 든 메뚜기 안내자" width={1254} height={1254} /><span>{counts.no > 0 ? "!" : counts.unknown > 0 || counts.evidenceMissing > 0 ? "△" : "✓"}</span></div>
-            <div className="overall-copy"><span className="target-kicker">종합 판정</span><h2>{counts.no > 0 ? "보완이 필요한 보호조치가 있습니다" : counts.unknown > 0 || counts.evidenceMissing > 0 ? "추가 확인과 증적 보완이 필요합니다" : "입력 기준 보호조치가 충족되었습니다"}</h2><p>{counts.no > 0 ? "안내서상 점검항목 중 하나라도 ‘아니요’이면 암호화에 상응하는 충분한 안전조치가 있다고 보기 어렵습니다. 해당 개인정보파일을 암호화하거나 미흡 조치를 보완해야 합니다." : "현재 답변을 기준으로 한 자가점검 결과입니다. 실제 설정과 증적, 최신 현행 법령을 최종 확인하세요."}</p></div>
-            <div className="overall-level"><small>우선순위</small><b>{counts.no > 0 ? "높음" : counts.unknown > 0 || counts.evidenceMissing > 0 ? "보통" : "낮음"}</b><span>자가점검 보조지표</span></div>
+          <div className={`overall-card ${evaluation.level}`}>
+            <div className="overall-mascot"><Image src="/images/grasshopper-success.webp" alt="점검 완료 문서와 방패를 든 메뚜기 안내자" width={1254} height={1254} /><span>{evaluation.symbol}</span></div>
+            <div className="overall-copy"><span className="target-kicker">종합 판정</span><h2>{evaluation.message}</h2><p>{counts.no > 0 ? "안내서상 점검항목 중 하나라도 ‘아니요’이면 암호화에 상응하는 충분한 안전조치가 있다고 보기 어렵습니다. 해당 개인정보파일을 암호화하거나 미흡 조치를 보완해야 합니다." : "현재 답변을 기준으로 한 자가점검 결과입니다. 실제 설정과 증적, 최신 현행 법령을 최종 확인하세요."}</p></div>
+            <div className="overall-level"><small>우선순위</small><b>{evaluation.priority}</b><span>자가점검 보조지표</span></div>
           </div>
 
           <div className="metric-grid">
@@ -1270,6 +1273,7 @@ export default function Home() {
             <h2>Ⅳ. 주요 미흡사항 및 개선계획</h2>
             {attentionItems.length ? attentionItems.map((item) => { const relatedCases = casesForItem(item.id); return <div className="report-action" key={item.id}><h3>{item.id}. {item.question}</h3><p><b>현재 상태</b> {answers[item.id] === "no" ? "미흡" : answers[item.id] === "yes" ? "증적 미확인" : "추가 확인 필요"}</p><p><b>개선 우선순위</b> {item.priority}</p><p><b>권고 조치</b> {item.action}</p><p><b>관련 근거</b> {item.law} / {item.standard} / {item.page}</p>{relatedCases.length > 0 && <div><b>참고 조사·처분 사례 ({relatedCases.length}건)</b><ul>{relatedCases.map((record) => <li key={record.id}>{record.title} ({record.date}, {record.sourceType}) — {record.relation}</li>)}</ul></div>}</div>; }) : <p>현재 입력 기준 주요 미흡사항 없음.</p>}
             <h2>Ⅴ. 위험도 분석 결과</h2>
+            <p>{evaluation.message} · 우선순위 {evaluation.priority}</p>
             <p>{counts.no > 0 ? "위험도 분석 점검항목에 ‘아니요’가 존재합니다. 안내서에 따라 암호화에 상응하는 충분한 안전조치가 이루어졌다고 보기 어려우므로 미흡조치를 이행하거나 해당 개인정보파일을 암호화해야 합니다." : "현재 입력 기준 ‘아니요’ 항목은 없습니다. 다만 증적의 적정성과 실제 보호조치 이행 여부를 개인정보 보호책임자 또는 해당 부서장이 최종 확인해야 합니다."}</p>
             <footer>본 결과는 개인정보처리자의 개인정보 보호조치 이행 현황을 스스로 확인하기 위한 자가점검 결과입니다. 행정기관의 공식적인 법 위반 판단 또는 처분 결과를 의미하지 않습니다. 법령은 점검일 현재 시행 중인 규정을 기준으로 확인하여야 합니다.</footer>
           </section>
