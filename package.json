@@ -15,10 +15,12 @@
     "build:sites": "bash scripts/build-verified.sh",
     "start": "next start",
     "start:sites": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run build:sites && node --test tests/*.test.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
-    "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
+    "typecheck": "tsc --noEmit",
+    "test:data": "node --test tests/data-integrity.test.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
@@ -45,5 +47,5 @@
     "wrangler": "4.92.0"
   },
   "type": "module",
-  "displayName": "\uac1c\uc778\uc815\ubcf4 \uc704\ud5d8\ub3c4 \uc790\uac00\uc810\uac80"
+  "displayName": "개인정보 위험도 자가점검"
 }

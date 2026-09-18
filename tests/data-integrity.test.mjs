@@ -1,29 +1,13 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
-import { transformWithOxc } from "vite";
-
-const loadTypeScript = async (relativePath, replacements = []) => {
-  const fileUrl = new URL(relativePath, import.meta.url);
-  let source = fs.readFileSync(fileUrl, "utf8");
-  for (const [from, to] of replacements) source = source.replace(from, to);
-  const transformed = await transformWithOxc(source, fileUrl.pathname, {
-    lang: "ts",
-    module: "esm",
-    target: "es2022",
-  });
-  return import(`data:text/javascript;base64,${Buffer.from(transformed.code).toString("base64")}`);
-};
-
+import ts from "typescript";
+import { loadTypeScript as load } from "./helpers/load-typescript.mjs";
+const loadTypeScript = (path) => load(path, import.meta.url);
 const historicalModule = await loadTypeScript("../app/historical-cases-data.ts");
 const historicalCaseRecords = historicalModule.historicalCaseRecords;
-const caseModule = await loadTypeScript("../app/cases-data.ts", [
-  [
-    'import { historicalCaseRecords } from "./historical-cases-data";',
-    `const historicalCaseRecords = ${JSON.stringify(historicalCaseRecords)};`,
-  ],
-]);
-const decisionModule = await loadTypeScript("../app/decision-data.ts", [['import { PUBLIC_DECISION_COLLECTED_AT, formatVerifiedDate } from "../lib/privacy-risk/dates";', 'const PUBLIC_DECISION_COLLECTED_AT = "historical"; const formatVerifiedDate = (date) => date;']]);
+const caseModule = await loadTypeScript("../app/cases-data.ts");
+const decisionModule = await loadTypeScript("../app/decision-data.ts");
 
 const caseRecords = caseModule.caseRecords;
 const publicDecisionsByCase = decisionModule.publicDecisionsByCase;
@@ -119,4 +103,18 @@ test("allows only the one verified shared source for separate meeting items", ()
       ["historic-2021-01", "historic-2021-02"],
     ]],
   );
+});
+
+test("preserves 26 checklist definitions: institution 11 / system 15", () => {
+  const source = ts.createSourceFile("page.tsx", pageSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let items;
+  function visit(node) {
+    if(ts.isVariableDeclaration(node) && node.name.getText(source) === "checks") items = node.initializer.elements;
+    ts.forEachChild(node,visit);
+  }
+  visit(source);
+  assert.equal(items.length,26);
+  const scopes=items.map(item=>item.properties.find(p=>p.name.getText(source)==="scope").initializer.text);
+  assert.equal(scopes.filter(x=>x==="institution").length,11);
+  assert.equal(scopes.filter(x=>x==="system").length,15);
 });
