@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
-import ts from "typescript";
 import { loadTypeScript as load } from "./helpers/load-typescript.mjs";
 const loadTypeScript = (path) => load(path, import.meta.url);
 const historicalModule = await loadTypeScript("../app/historical-cases-data.ts");
@@ -9,10 +8,11 @@ const historicalCaseRecords = historicalModule.historicalCaseRecords;
 const caseModule = await loadTypeScript("../app/cases-data.ts");
 const decisionModule = await loadTypeScript("../app/decision-data.ts");
 
+const { checks } = await loadTypeScript("../lib/privacy-risk/checks.ts");
 const caseRecords = caseModule.caseRecords;
 const publicDecisionsByCase = decisionModule.publicDecisionsByCase;
 const existingCaseRecords = caseRecords.filter((record) => !record.id.startsWith("historic-"));
-const pageSource = fs.readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
+const pageSource = fs.readFileSync(new URL("../components/privacy-risk/useAssessment.ts", import.meta.url), "utf8");
 
 const countByItem = (records) => Object.fromEntries(
   Array.from({ length: 26 }, (_, index) => {
@@ -106,15 +106,15 @@ test("allows only the one verified shared source for separate meeting items", ()
 });
 
 test("preserves 26 checklist definitions: institution 11 / system 15", () => {
-  const source = ts.createSourceFile("page.tsx", pageSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-  let items;
-  function visit(node) {
-    if(ts.isVariableDeclaration(node) && node.name.getText(source) === "checks") items = node.initializer.elements;
-    ts.forEachChild(node,visit);
-  }
-  visit(source);
-  assert.equal(items.length,26);
-  const scopes=items.map(item=>item.properties.find(p=>p.name.getText(source)==="scope").initializer.text);
+  assert.equal(checks.length,26);
+  assert.deepEqual(checks.map(item=>item.id),Array.from({length:26},(_,i)=>i+1));
+  const scopes=checks.map(item=>item.scope);
   assert.equal(scopes.filter(x=>x==="institution").length,11);
   assert.equal(scopes.filter(x=>x==="system").length,15);
+});
+
+test("preserves every original checklist question, explanation, reference, evidence and action", async () => {
+  const { createHash } = await import('node:crypto');
+  const expected=JSON.parse(fs.readFileSync(new URL('./preserved-data.json',import.meta.url),'utf8'));
+  assert.equal(createHash('sha256').update(JSON.stringify(checks)).digest('hex'),expected.checks);
 });

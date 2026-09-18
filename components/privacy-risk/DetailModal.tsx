@@ -1,0 +1,15 @@
+"use client";
+
+import type { CaseRecord } from "../../app/cases-data";
+import { privacyLawReaderUrl,privacyNoticeArticleLinks } from "../../lib/privacy-risk/legal-links";
+import type { CheckItem } from "../../lib/privacy-risk/types";
+import { MiniIcon } from "./Icons";
+
+export function DetailModal({ item, cases, onClose, onEvidence, onGuidePage, onCase }: { item: CheckItem; cases: CaseRecord[]; onClose: () => void; onEvidence: () => void; onGuidePage: () => void; onCase: (record: CaseRecord) => void }) {
+  const lawUrl = privacyLawReaderUrl("privacy-law", item.law);
+  const decreeUrl = privacyLawReaderUrl("privacy-decree", item.law);
+  const lawLabel = item.law.split("·").filter((part) => !part.includes("시행령")).join(" · ").trim();
+  const noticeLinks = privacyNoticeArticleLinks(item.standard);
+  return <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && onClose()}><article className="modal-card detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title"><button className="modal-close" onClick={onClose} aria-label="닫기"><MiniIcon name="close" /></button><span className="modal-kicker">{item.id}번 · {item.category}</span><h2 id="detail-title">{item.question}</h2><section><h3><MiniIcon name="book" /> 안내서 해설</h3><p>{item.easy}</p><button type="button" className="source-chip source-chip-button" onClick={onGuidePage}><span>출처</span><b>개인정보의 안전성 확보조치 기준 안내서(2025.11)</b><em>{item.page} 열기 <MiniIcon name="arrow" /></em></button></section><section><h3><MiniIcon name="clip" /> 확인해야 할 증적자료</h3><ul>{item.evidence.map((text) => <li key={text}><MiniIcon name="check" /> {text}</li>)}</ul></section><section><h3><MiniIcon name="scale" /> 관련 법적 근거</h3><div className="legal-links"><a href={lawUrl} target="_blank" rel="noreferrer"><span>보-편 · 법률</span><b>{lawLabel}</b><MiniIcon name="arrow" /></a>{item.law.includes("시행령") && <a href={decreeUrl} target="_blank" rel="noreferrer"><span>보-편 · 시행령</span><b>{item.law.split("·").find((part) => part.includes("시행령"))?.trim()}</b><MiniIcon name="arrow" /></a>}{noticeLinks.map((notice) => <a key={notice.url} href={notice.url} target="_blank" rel="noreferrer"><span>보-편 · 개인정보보호위원회 고시</span><b>{notice.label}</b><MiniIcon name="arrow" /></a>)}</div><small className="legal-date">법령 연결: 보-편(보호법 편히보기) · 링크에서 조문 전문과 시행일을 다시 확인하세요.</small></section><section className="linked-case-section"><h3><MiniIcon name="case" /> 실제 조사·처분 사례 {cases.length > 0 && <span className="linked-case-count">{cases.length}건 전체</span>}</h3>{cases.length > 0 ? cases.map((record) => <button key={record.id} onClick={() => onCase(record)}><div><span>직접 관련 · {record.date}</span><b>{record.title}</b><small>{record.targets}</small></div><MiniIcon name="arrow" /></button>) : <p>현재 확인된 개인정보위 공식자료에서 이 항목과 직접 연결되는 공개 처분사례를 찾지 못했습니다.</p>}</section><div className="modal-actions"><button className="secondary-button" onClick={onClose}>닫기</button><button className="primary-button" onClick={onEvidence}>증적 추가 <MiniIcon name="arrow" /></button></div></article></div>;
+}
+
