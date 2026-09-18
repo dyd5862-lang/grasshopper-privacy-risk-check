@@ -6,7 +6,7 @@ import { CASE_DATA_VERIFIED_AT, formatVerifiedDate, casePeriodCutoff, localDateK
 import { evaluateAssessment } from "../lib/privacy-risk/evaluation";
 import { CaseRecord, caseRecords, officialCaseSearchUrl } from "./cases-data";
 import { publicDecisionCollectedAt, publicDecisionsByCase } from "./decision-data";
-import { guidePages, guideTitle } from "./guide-pages";
+import { guideTitle, officialGuideUrl } from "./guide-pages";
 
 type Screen = "intro" | "profile" | "check" | "result" | "cases";
 type Answer = "yes" | "no" | "unknown" | "na";
@@ -512,45 +512,6 @@ const relevanceFor = (record: CaseRecord, itemId?: number) => {
   return record.itemIds.includes(itemId) ? "직접 관련" : "유사 사례";
 };
 
-const guidePageNumbers = (reference: string) => {
-  const numbers = Array.from(reference.matchAll(/\d+/g), (match) => Number(match[0]));
-  if (numbers.length < 2 || numbers[1] <= numbers[0]) return numbers.slice(0, 1);
-  return Array.from({ length: numbers[1] - numbers[0] + 1 }, (_, index) => numbers[0] + index);
-};
-
-type GuideBlock = { kind: "heading" | "question" | "bullet" | "note" | "body"; text: string };
-
-const guideBlocks = (lines: string[]) => {
-  const blocks: GuideBlock[] = [];
-  let marker = "";
-  lines.forEach((sourceLine) => {
-    if (sourceLine === "∙" || sourceLine === "▶") {
-      marker = sourceLine;
-      return;
-    }
-    const line = sourceLine.replace(/\s+/g, " ").trim();
-    const kind: GuideBlock["kind"] = marker === "∙" || line.startsWith("∙") || line.startsWith("-")
-      ? "bullet"
-      : marker === "▶" || line.startsWith("※") || line.startsWith("▶")
-        ? "note"
-        : /^(?:[➀-➈]|[①-⑳]|[IVX]+\.|\d+-\d+\.)/.test(line)
-          ? "heading"
-          : /^\d+\.\s/.test(line)
-            ? "question"
-            : "body";
-    marker = "";
-    if (kind === "body") {
-      const previous = blocks.at(-1);
-      if (previous && previous.kind !== "heading") {
-        previous.text += ` ${line}`;
-        return;
-      }
-    }
-    blocks.push({ kind, text: line.replace(/^[∙▶]\s*/, "") });
-  });
-  return blocks;
-};
-
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("intro");
   const [profile, setProfile] = useState<Profile>(initialProfile);
@@ -947,7 +908,7 @@ export default function Home() {
             <div className="section-heading">
               <span className="section-kicker">점검 흐름</span>
               <h2>체크리스트를 넘어,<br />개선계획까지 이어집니다</h2>
-              <p>안내서의 점검표 원문과 해설을 실무자가 바로 확인할 수 있도록 구성했습니다.</p>
+              <p>안내서의 점검항목과 참고 설명을 확인하고, 공식 안내서 원문으로 연결합니다.</p>
             </div>
             <div className="process-grid">
               {[
@@ -1319,10 +1280,7 @@ function DetailModal({ item, cases, onClose, onEvidence, onGuidePage, onCase }: 
 }
 
 function GuidePageModal({ item, onClose }: { item: CheckItem; onClose: () => void }) {
-  const availablePages = guidePageNumbers(item.page).filter((page) => guidePages[page]);
-  const [selectedPage, setSelectedPage] = useState(availablePages[0] ?? 170);
-  const blocks = guideBlocks(guidePages[selectedPage] ?? []);
-  return <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><article className="modal-card guide-page-modal" role="dialog" aria-modal="true" aria-labelledby="guide-page-title"><button className="modal-close" onClick={onClose} aria-label="닫기"><MiniIcon name="close" /></button><span className="modal-kicker">{item.id}번 점검항목 · 안내서 원문</span><h2 id="guide-page-title">{guideTitle}</h2><p>{item.question}</p>{availablePages.length > 1 && <div className="guide-page-tabs" role="tablist" aria-label="안내서 페이지 선택">{availablePages.map((page) => <button key={page} role="tab" aria-selected={selectedPage === page} className={selectedPage === page ? "active" : ""} onClick={() => setSelectedPage(page)}>p.{page}</button>)}</div>}<section className="guide-page-sheet" aria-label={`안내서 ${selectedPage}페이지`}><header><span>개인정보보호위원회</span><b>{selectedPage}</b></header><div className="guide-page-copy">{blocks.map((block, index) => <p key={`${block.kind}-${index}`} className={`guide-${block.kind}`}>{block.kind === "bullet" && <span aria-hidden="true">•</span>}{block.text}</p>)}</div><footer>출처: 개인정보보호위원회, 「개인정보의 안전성 확보조치 기준 안내서」, 2025.11.</footer></section><div className="modal-actions"><button className="secondary-button" onClick={onClose}>닫기</button></div></article></div>;
+  return <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><article className="modal-card guide-page-modal" role="dialog" aria-modal="true" aria-labelledby="guide-page-title"><button className="modal-close" onClick={onClose} aria-label="닫기"><MiniIcon name="close" /></button><span className="modal-kicker">{item.id}번 점검항목 · 안내서 참고</span><h2 id="guide-page-title">{guideTitle}</h2><p>{item.question}</p><section className="guide-page-sheet" aria-label="점검항목 설명 및 공식 출처"><header><span>프로젝트의 점검항목 설명</span><b>{item.page}</b></header><div className="guide-page-copy"><p>{item.easy}</p><p>이 설명은 자가점검을 돕기 위한 참고 설명이며, 안내서 원문을 대체하지 않습니다. 상세 해설과 원문은 아래 개인정보보호위원회 안내서 게시판에서 문서 제목과 발행월(2025.11.)을 확인하여 열람하세요.</p></div><footer>출처: 개인정보보호위원회, 「개인정보의 안전성 확보조치 기준 안내서」, 2025.11., {item.page}. 원문 이용조건은 공식 게시물과 첨부문서를 확인하세요.</footer></section><div className="modal-actions"><button className="secondary-button" onClick={onClose}>닫기</button><a className="primary-button" href={officialGuideUrl} target="_blank" rel="noreferrer">공식 안내서 게시판 <MiniIcon name="arrow" /></a></div></article></div>;
 }
 
 function RelatedCasesModal({ item, cases, onClose, onCase }: { item: CheckItem; cases: CaseRecord[]; onClose: () => void; onCase: (record: CaseRecord) => void }) {
