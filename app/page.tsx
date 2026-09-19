@@ -1,5 +1,6 @@
 "use client";
 
+import { ToolSwitcher } from "../components/safeguards/ToolSwitcher";
 import { CaseModal } from "../components/privacy-risk/CaseModal";
 import { CasesScreen } from "../components/privacy-risk/CasesScreen";
 import { ChecklistScreen } from "../components/privacy-risk/ChecklistScreen";
@@ -20,6 +21,7 @@ export default function Home() {
   const { screen, setScreen, setExpanded, evidenceFor, setEvidenceFor, setDetailFor, setGuideFor, selectedCase, setSelectedCase, setCaseListFor, readerPreferences, isFullscreen, completed, casesForItem, openCases, addEvidence, resetAll, updateReaderPreference, resetReaderPreferences, toggleFullscreen, activeDetail, activeGuideItem, activeCaseListItem } = controller;
   return (
     <main className="reader-shell">
+      <ToolSwitcher active="risk" />
       <div className="reader-toolbar no-print" aria-label="화면 보기 설정">
         <div className="reader-controls">
           <div className="theme-buttons" role="group" aria-label="색상 테마">
