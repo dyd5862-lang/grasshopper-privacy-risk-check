@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import {loadTypeScript} from '../tests/helpers/load-typescript.mjs';
+const {caseRecords}=await loadTypeScript('../app/cases-data.ts',import.meta.url);
+const {publicDecisionsByCase}=await loadTypeScript('../app/decision-data.ts',import.meta.url);
+const {questions,sourceVersion}=await loadTypeScript('../data/safeguards/index.ts',import.meta.url);
+const {caseLinks,caseReviews,decisionReviews}=await loadTypeScript('../data/safeguards/case-links.ts',import.meta.url);
+const records=new Map(caseRecords.map(r=>[r.id,r]));const qmap=new Map(questions.map(q=>[q.id,q]));
+const clean=s=>String(s).replaceAll('|','／').replaceAll('\n',' ');
+const mdLink=(text,url)=>`[${text}](${url})`;
+const linked=new Set(caseLinks.map(l=>l.questionId));
+let md=`# 안전성 확보조치 문항–사례 대응표\n\n검토일: 2026-09-20. 기준: ${sourceVersion}.\n\n이 문서는 scripts/generate-safeguards-case-map.mjs로 연결 데이터에서 생성합니다. 사례 본문과 공식 URL은 기존 공통 데이터에서 가져옵니다. 자동 키워드 연결은 하지 않습니다.\n\n## 범위와 한계\n\n- 기존 사례 ${caseRecords.length}건, 의결서 연결 ${Object.values(publicDecisionsByCase).flat().length}건(${Object.keys(publicDecisionsByCase).length}개 사례).\n- 이번 연결: ${linked.size}/${questions.length}개 점검 문항, 중복 제외 ${Object.keys(caseReviews).length}개 사례, ${caseLinks.length}개 연결(직접 ${caseLinks.filter(l=>l.relevance==='direct').length}, 참고 ${caseLinks.filter(l=>l.relevance==='reference').length}). 사전확인 15개는 사례 연결 대상 점검 문항과 별도입니다.\n- 직접 관련은 공식 보도자료에서 해당 보호조치의 실패가 확인된 경우입니다. 현행 세부 조항이 처분 당시 그대로 적용되었다는 뜻이 아닙니다. 계획 수록 여부, 공공시스템 추가의무, 부록의 별도 평가조건은 사실이 확인되지 않으면 참고로만 연결합니다.\n- 보도자료 6개 본문 확인. 공개 의결서 12개 기존 연결 중 PDF 12개는 접근 오류로 본문 미검증. 공식 게시판 6개 중 4개에서 7개 의결서의 첨부 존재·의결번호·게시판 의결일 확인, 이 중 5개는 첨부명에서 기관명도 대조. 나머지 2개 게시판(5개 문서)은 접근 오류. 본문 사실관계까지 검증된 의결서는 0개입니다.\n- 명품브랜드 사례의 의결서는 기존 자료에서 미확보이며 공개 여부를 확정하지 않습니다. PDF 접근 오류는 비공개나 자료 부재를 뜻하지 않습니다.\n- 당시 세부 법조항·고시 버전은 원문 미확인으로 남깁니다. 기존 사례의 laws 필드를 당시 확정 조문으로 표시하지 않습니다.\n- 보도자료 날짜는 게시일로, 회의일은 보도자료에서 확인한 의결일로 구분합니다. 공무원연금공단 의결번호에는 2025가 포함되지만 공식 게시판 의결일은 2026-03-25입니다. 이를 임의로 수정하지 않습니다.\n- 이번 범위 밖 기존 103개 사례와 그 링크는 전수 재검증하지 않았습니다. 연결 없음은 선례·의무·위험 없음이 아닙니다.\n\n## 문항별 연결\n\n| 문항·현재 조문 | 점검질문 | 사례 ID·사건명 | 의결일 / 보도일 | 당시 적용법령·조문 확인 범위 | 구분 | 연결 이유·실무 확인사항 | 공식 출처·자료 상태 |\n|---|---|---|---|---|---|---|---|\n`;
+for(const l of caseLinks){const q=qmap.get(l.questionId),r=records.get(l.caseId),v=caseReviews[l.caseId],ds=publicDecisionsByCase[r.id]??[];md+='| '+[q.id+' · '+q.article,q.question,r.id+' · '+r.title,v.decisionDate+' / '+r.date,v.lawNote,l.relevance==='direct'?'직접 관련':'참고 사례',l.reason+' 확인: '+l.checkPoint,mdLink('보도자료 본문 확인',r.source)+' · '+v.sourceLocator+' · '+(ds.length?`기존 의결서 ${ds.length}개: 아래 문서별 상태 참조`:'의결서 미확보·공개 여부 확인 필요')].map(clean).join(' | ')+' |\n';}
+md+='\n## 의결서별 검증 기록\n\n| 사례 | 문서·기존 기관 연결 | 의결일(보도자료·게시판) | 공식 게시판 | 기존 PDF 링크 | 확인 범위 |\n|---|---|---|---|---|---|\n';
+for(const cid of Object.keys(caseReviews))for(const d of publicDecisionsByCase[cid]??[]){const v=decisionReviews[d.decisionNo];md+='| '+[cid,d.decisionNo+' · '+d.organization,caseReviews[cid].decisionDate,mdLink(v.listingStatus==='confirmed'?'첨부 존재 확인':'접근 오류·미검증',d.agendaUrl),mdLink('접근 오류·본문 미검증',d.url),v.note].map(clean).join(' | ')+' |\n';}
+md+='\n## 아직 연결하지 않은 문항\n\n다음 문항은 이번 검토 범위에서 직접 대응하는 사례를 확정하지 않았습니다. 일부는 기술적 세부조건·물리적 조치·출력·재해·키관리·공공시스템 추가조치 등 별도 증명이 필요합니다.\n\n'+questions.filter(q=>!linked.has(q.id)).map(q=>`- ${q.id} · ${q.article} · ${q.question}`).join('\n')+'\n';
+const path=new URL('../docs/safeguards-case-map.md',import.meta.url);
+if(process.argv.includes('--check')){if(fs.readFileSync(path,'utf8')!==md)throw new Error('대응표와 데이터가 다릅니다. 생성 스크립트를 실행하세요.');}else fs.writeFileSync(path,md);
+console.log(`${linked.size} questions / ${caseLinks.length} links / ${Object.keys(caseReviews).length} cases`);

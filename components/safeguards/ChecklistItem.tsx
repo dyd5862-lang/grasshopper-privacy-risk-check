@@ -1,3 +1,4 @@
+import { CaseEntryPoint } from './CaseEntryPoint';
 import type { Evaluated, Response, ScopeConfirmation } from '../../lib/safeguards/types';
 import { labels } from '../../lib/safeguards/evaluation-engine';
 import styles from './safeguards.module.css';
@@ -16,5 +17,6 @@ export function ChecklistItem({row,scope,onResponse,onScope}:{row:Evaluated;scop
  {row.applicable==='UNKNOWN'&&<p className={styles.muted}>적용조건이 확정될 때까지 ‘충족’ 응답도 결과에서는 ‘추가 확인’으로 표시합니다.</p>}
  <div className={styles.grid}><label className={styles.field}>판단 사유·마스킹된 설명<textarea aria-label="판단 사유·마스킹된 설명" value={r.reason} maxLength={4000} onChange={e=>onResponse({...r,reason:e.target.value})}/></label><label className={styles.field}>증적명·내부 문서번호 또는 참조<textarea aria-label="증적명·내부 문서번호 또는 참조" value={r.evidenceRef} maxLength={2000} placeholder="실제 증적 파일은 업로드하지 않습니다." onChange={e=>onResponse({...r,evidenceRef:e.target.value})}/></label><label className={styles.field}>확인일<input type="date" value={r.checkedAt} onChange={e=>onResponse({...r,checkedAt:e.target.value})}/></label></div>
  <details className={styles.help}><summary>근거·증적·판단기준 펼쳐보기</summary><dl><dt>근거 성격</dt><dd>{q.basisType}</dd><dt>점검 단위</dt><dd>{q.scopeKey}</dd><dt>증적 예시</dt><dd>{q.evidenceExamples}</dd><dt>충족 기준</dt><dd>{q.passCriteria}</dd><dt>미흡 기준</dt><dd>{q.failCriteria}</dd><dt>출처 페이지</dt><dd>{q.sourcePages}</dd><dt>시행 시점</dt><dd>{q.effectiveFrom?`${q.effectiveFrom} 개정 문언 적용. 그 전에는 준비평가이며 종전 의무 별도 확인.`:'이 기준자료의 일반 평가항목. 과거 최초 시행일은 별도 이력 확인.'}</dd></dl></details>
+ <CaseEntryPoint question={q} row={row}/>
  </article>;
 }
