@@ -5,7 +5,7 @@ import styles from './safeguards.module.css';
 export function ChecklistItem({row,scope,onResponse,onScope}:{row:Evaluated;scope?:ScopeConfirmation;onResponse:(r:Response,confirm?:boolean)=>void;onScope:(s:ScopeConfirmation)=>void}) {
  const q=row.question,r=row.response;
  return <article id={q.id} className={`${styles.item} ${row.bucket==='readiness'?styles.preparation:''}`}>
- <span className={styles.badge}>{q.id}</span><span className={styles.badge}>{row.applicable==='UNKNOWN'?'적용조건 추가 확인':labels[row.answer]}</span>{row.bucket==='readiness'&&<span className={styles.badge}>2026.11.1 시행 예정 — 준비평가</span>}
+ <span className={styles.badge}>{q.id}</span><span className={styles.badge}>{row.applicable==='UNKNOWN'?'적용조건 추가 확인':labels[row.answer]}</span>
  <p className={styles.meta}>{q.article}</p><h3>{q.question}</h3><p className={styles.meta}><b>적용조건</b> · {q.applicability}</p>
  {row.needsScope&&<div className={styles.note}><label className={styles.field}>이 문항의 대상·업무·예외 조건을 확인했나요?<select aria-label={`${q.id} 적용조건 확인`} value={scope?.value??'UNKNOWN'} onChange={e=>onScope({value:e.target.value as ScopeConfirmation['value'],reason:scope?.reason??'',evidenceRef:scope?.evidenceRef??'',context:''})}><option value="UNKNOWN">추가 확인</option><option value="YES">적용조건에 해당함</option><option value="NO">대상·업무 자체가 없어 비적용 (근거 필요)</option></select></label>
  <p>현재 실적이 없는 경우에도 절차·설정으로 준비상태를 확인하세요. 사전조건이 미확인이라면 이 선택만으로 적용 여부가 확정되지 않습니다.</p>

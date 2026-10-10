@@ -14,7 +14,7 @@ export function RelatedCasesReport({rows}:{rows:Evaluated[]}) {
       <h3>{entry.record.targets}</h3><p>{entry.record.title} · 의결일 {entry.review.decisionDate}</p>
       <ul>{items.map(({row,link,attention})=><li key={row.question.id}><b>{row.question.id} · {row.question.article} · {relevanceLabels[link.relevance]}</b><p>{attention}{row.bucket==='readiness'?' · 개정 준비평가':''}</p><p className="no-print">{link.reason}</p><button className={`${styles.textButton} no-print`} onClick={()=>setSelection({question:row.question,caseId:entry.record.id})}>이 문항의 사례 상세 보기 · {row.question.id}</button></li>)}</ul>
       <div className="no-print"><CaseSources entry={entry} compact/></div>
-      <div className={styles.printSources}><OfficialLink href={entry.record.source}>공식 보도자료</OfficialLink><p className={styles.url}>{entry.record.source}</p>{[...new Set(entry.decisions.map(x=>x.document.agendaUrl))].map(url=><p className={styles.url} key={url}>의결서 첨부페이지: {url}</p>)}<p>{entry.decisions.length?'의결서 본문 미검증.':'의결서 미확보 · 공개 여부 확인 필요.'} 사례 설명은 참고자료이며 현재 법 위반을 확정하지 않습니다.</p></div>
+      <div className={styles.printSources}><OfficialLink href={entry.record.source}>공식 보도자료</OfficialLink><p className={styles.url}>{entry.record.source}</p>{[...new Set(entry.decisions.map(x=>x.document.agendaUrl))].map(url=><p className={styles.url} key={url}>의결서 첨부페이지: {url}</p>)}<p>{entry.decisions.length?'의결서 원문은 공식 첨부페이지에서 확인할 수 있습니다.':'의결서 미확보 · 공개 여부 확인 필요.'} 사례 설명은 참고자료이며 현재 법 위반을 확정하지 않습니다.</p></div>
     </article>)}
     {selection && <RelatedCasesDialog question={selection.question} initialCaseId={selection.caseId} onClose={()=>setSelection(null)}/>}
   </section>;
