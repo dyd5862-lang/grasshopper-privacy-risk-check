@@ -32,9 +32,9 @@ export function RelatedCasesDialog({question,initialCaseId,onClose}:{question:Qu
         <nav className={styles.caseList} aria-label="관련 사례 목록">{entries.map(x=><button key={x.record.id} aria-pressed={x.record.id===entry.record.id} onClick={()=>{setCaseId(x.record.id);requestAnimationFrame(()=>detailRef.current?.focus({preventScroll:true}));}}><span className={styles.badge}>{relevanceLabels[x.link.relevance]}</span><b>{x.record.targets}</b><small>의결일 {x.review.decisionDate}</small></button>)}</nav>
         <article ref={detailRef} className={styles.detail} tabIndex={-1} aria-label="선택한 사례 상세">
           <span className={styles.badge}>{relevanceLabels[entry.link.relevance]}</span><h3>{entry.record.title}</h3>
-          <p><b>처분 대상</b> {entry.record.targets}</p><p>의결일(보도자료 기준) {entry.review.decisionDate} · 보도자료 게시일 {entry.record.date}</p>
+          <p><b>처분 대상</b> {entry.record.targets}</p><p>{entry.record.sourceType==='개인정보위 공개용 의결서'?'의결일(의결서 기준)':'의결일(보도자료 기준)'} {entry.review.decisionDate} · {entry.record.sourceType==='개인정보위 공개용 의결서'?'의결서 게시물 작성일':'보도자료 게시일'} {entry.record.date}</p>
           <section className={styles.relation}><h4>현재 문항과 연결한 이유</h4><p>{entry.link.reason}</p><h4>점검 시 확인할 사항 · 도구가 정리한 설명</h4><p>{entry.link.checkPoint}</p></section>
-          <section><h4>사건 개요 · 공식 보도자료 요약</h4><p>{entry.record.summary}</p><ul>{entry.record.problems.map(text=><li key={text}>{text}</li>)}</ul></section>
+          <section><h4>사건 개요 · {entry.record.sourceType==='개인정보위 공개용 의결서'?'공개용 의결서 텍스트 요약':'공식 보도자료 요약'}</h4><p>{entry.record.summary}</p><ul>{entry.record.problems.map(text=><li key={text}>{text}</li>)}</ul></section>
           <section><h4>처분 결과</h4><p>{entry.record.dispositionSummary}</p><p className={styles.muted}>여러 기관·위반행위의 처분 총액을 현재 문항 하나의 제재 금액으로 해석하지 마세요.</p></section>
           <section><h4>처분 당시 적용 법령·조문 확인 범위</h4><p>{entry.review.lawNote}</p><h4>현재 점검 조문과의 구분</h4><p>{entry.review.historicalNote}</p>{question.effectiveFrom && <p>이 문항의 개정 문구 시행일: {question.effectiveFrom}. 시행 전에는 준비평가로 구분합니다.</p>}</section>
           <CaseSources entry={entry}/>
