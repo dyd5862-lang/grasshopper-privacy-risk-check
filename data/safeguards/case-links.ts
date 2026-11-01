@@ -1,8 +1,10 @@
 // Reviewed mappings only. Case bodies and URLs remain in app/cases-data.ts and app/decision-data.ts.
 export type CaseLink = { questionId: string; caseId: string; relevance: 'direct' | 'reference'; reason: string; checkPoint: string };
 export type CaseReview = { checkedAt: string; decisionDate: string; sourceLocator: string; lawNote: string; historicalNote: string };
-export type DecisionReview = { listingStatus: 'confirmed' | 'unavailable'; identityStatus: 'filename-date' | 'unconfirmed'; bodyStatus: 'unavailable'; pdfStatus: 'unavailable'; checkedAt: string; note: string };
+export type DecisionReview = { listingStatus: 'confirmed' | 'unavailable'; identityStatus: 'filename-date' | 'unconfirmed'; bodyStatus: 'unavailable' | 'text-only'; pdfStatus: 'unavailable'; checkedAt: string; note: string };
 export const caseReviews: Record<string, CaseReview> = {
+  "jenertec-2026-217-390": { checkedAt: "2026-11-01", decisionDate: "2026-09-09", sourceLocator: "국가법령정보센터 ppc ID 10947: 주문·Ⅱ.3·Ⅲ.2·Ⅳ·Ⅴ (이미지 표 미확인)", lawNote: "당시 보호법 제29조·제34조, 2023-6호 제6조제1항·제7조제1항·제8조제1항. 현재 문항 대응과 당시 조문을 구분합니다.", historicalNote: "작성일 2026-09-18은 최초 공개일로 확정하지 않습니다. 의결서 텍스트만 확인했으며 이미지 표·PDF/HWP 원문 파일은 미확인입니다." },
+  "sbridge-2026-217-391": { checkedAt: "2026-11-01", decisionDate: "2026-09-09", sourceLocator: "국가법령정보센터 ppc ID 10941: 주문·Ⅱ.3·Ⅲ.2·Ⅳ·Ⅴ (이미지 표 미확인)", lawNote: "구법 제29조·구 시행령 제48조의2, 2021-3호 기술적·관리적 보호조치 기준 제4조제5항·제9항·제5조제1항. 현행 기준 제6조와 사실관계를 대응합니다.", historicalNote: "2023년 8월 행위에 현재 고시를 소급하지 않습니다. 위원회 홈페이지 공표이며 사업자 공표명령은 아닙니다. 이미지 표·PDF/HWP 파일은 미확인입니다." },
   "daekyo-2026-10": {
     checkedAt: "2026-11-01", decisionDate: "2026-10-28",
     sourceLocator: "HTML 본문의 대교 조사 결과·처분 문단(첨부 본문 미확인)",
@@ -59,6 +61,8 @@ export const caseReviews: Record<string, CaseReview> = {
   }
 };
 export const decisionReviews: Record<string, DecisionReview> = {
+  "제2026-217-390호": { listingStatus: "confirmed", identityStatus: "filename-date", bodyStatus: "text-only", pdfStatus: "unavailable", checkedAt: "2026-11-01", note: "공식 첨부 목록과 국가법령정보센터 텍스트의 의안번호·대상·의결일을 대조. 이미지 표와 PDF/HWP 파일은 미확인." },
+  "제2026-217-391호": { listingStatus: "confirmed", identityStatus: "filename-date", bodyStatus: "text-only", pdfStatus: "unavailable", checkedAt: "2026-11-01", note: "공식 첨부 목록과 국가법령정보센터 텍스트의 의안번호·대상·의결일을 대조. 이미지 표와 PDF/HWP 파일은 미확인." },
   "제2025-026-305호": {
     "listingStatus": "confirmed",
     "identityStatus": "filename-date",
@@ -157,6 +161,10 @@ export const decisionReviews: Record<string, DecisionReview> = {
   }
 };
 export const caseLinks: CaseLink[] = [
+  { questionId: "N-01", caseId: "jenertec-2026-217-390", relevance: "direct", reason: "웹·DB서버와 DB 관리 프로그램의 IP 접근통제 미흡을 의결서 텍스트에서 확인.", checkPoint: "DB 관리 프로그램까지 허용 IP를 제한하는지 확인하세요." },
+  { questionId: "E-01", caseId: "jenertec-2026-217-390", relevance: "direct", reason: "이용자 비밀번호를 평문으로 저장한 사실과 당시 제7조제1항 위반 판단 확인.", checkPoint: "현행 문항의 일방향 비밀번호 저장 방식과 실제 구현을 확인하세요." },
+  { questionId: "N-02", caseId: "sbridge-2026-217-391", relevance: "direct", reason: "웹서버 접속 IP 재분석 등 악성행위 탐지·차단 운영 미흡 확인.", checkPoint: "접속 IP 분석과 경보 후속조치가 이루어지는지 확인하세요." },
+  { questionId: "N-05", caseId: "sbridge-2026-217-391", relevance: "direct", reason: "파일 업로드 확장자 검사·실행권한 제한 등 취약점 보완 미이행 확인.", checkPoint: "파일 업로드를 통한 비인가 실행·유출 방지 조치를 확인하세요." },
   { questionId: "M-24", caseId: "daekyo-2026-10", relevance: "direct", reason: "보호책임자의 계획 이행 점검 소홀.", checkPoint: "이행 점검의 실효성을 확인하세요." },
   { questionId: "N-01", caseId: "daekyo-2026-10", relevance: "direct", reason: "관계사 서버의 불필요한 DB 접근 허용.", checkPoint: "접근 허용 범위를 확인하세요." },
   { questionId: "N-02", caseId: "daekyo-2026-10", relevance: "direct", reason: "탐지 안내 이후 분석·차단 미흡.", checkPoint: "경보 후속조치를 확인하세요." },

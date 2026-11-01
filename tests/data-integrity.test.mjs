@@ -11,7 +11,7 @@ const decisionModule = await loadTypeScript("../app/decision-data.ts");
 const { checks } = await loadTypeScript("../lib/privacy-risk/checks.ts");
 const caseRecords = caseModule.caseRecords;
 const publicDecisionsByCase = decisionModule.publicDecisionsByCase;
-const addedIds = new Set(["daekyo-2026-10", "younghoon-medical-2026-10"]);
+const addedIds = new Set(["daekyo-2026-10", "younghoon-medical-2026-10", "jenertec-2026-217-390", "sbridge-2026-217-391"]);
 const baselineCaseRecords = caseRecords.filter(record => !addedIds.has(record.id));
 const existingCaseRecords = baselineCaseRecords.filter((record) => !record.id.startsWith("historic-"));
 const pageSource = fs.readFileSync(new URL("../components/privacy-risk/useAssessment.ts", import.meta.url), "utf8");
@@ -27,8 +27,8 @@ test("preserves 53 cases and merges exactly 56 historical cases", () => {
   assert.equal(existingCaseRecords.length, 53);
   assert.equal(historicalCaseRecords.length, 56);
   assert.equal(baselineCaseRecords.length, 109);
-  assert.equal(caseRecords.length, 111);
-  assert.equal(new Set(caseRecords.map((record) => record.id)).size, 111);
+  assert.equal(caseRecords.length, 113);
+  assert.equal(new Set(caseRecords.map((record) => record.id)).size, 113);
   assert.deepEqual(
     Object.fromEntries(["2020", "2021", "2022", "2023"].map((year) => [
       year,
@@ -77,9 +77,9 @@ test("keeps every historical record complete and sorted", () => {
 test("retains 55 decisions and adds only the verified 17 documents", () => {
   const allDecisions = Object.values(publicDecisionsByCase).flat();
   const historicalDecisionKeys = Object.keys(publicDecisionsByCase).filter((id) => id.startsWith("historic-"));
-  assert.equal(Object.keys(publicDecisionsByCase).length, 31);
-  assert.equal(allDecisions.length, 72);
-  assert.equal(new Set(allDecisions.map((decision) => decision.decisionNo)).size, 72);
+  assert.equal(Object.keys(publicDecisionsByCase).length, 33);
+  assert.equal(allDecisions.length, 74);
+  assert.equal(new Set(allDecisions.map((decision) => decision.decisionNo)).size, 74);
   assert.deepEqual(historicalDecisionKeys.toSorted(), [
     "historic-2020-01",
     "historic-2022-02",

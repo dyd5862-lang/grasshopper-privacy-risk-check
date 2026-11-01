@@ -15,8 +15,8 @@ export function CaseSources({entry,compact=false}:{entry:RelatedCase;compact?:bo
     </>}
   </>;
   return <div className={styles.sources}>
-    <OfficialLink href={entry.record.source}>개인정보위 공식 보도자료</OfficialLink>
-    {!compact && <p>보도자료 본문 확인 · {entry.review.checkedAt} · {entry.review.sourceLocator}</p>}
+    <OfficialLink href={entry.record.source}>{entry.record.sourceType === "개인정보위 공개용 의결서" ? "개인정보위 공식 의결서 게시물" : "개인정보위 공식 보도자료"}</OfficialLink>
+    {!compact && <p>{entry.record.sourceType === "개인정보위 공개용 의결서" ? "의결서 텍스트 확인(이미지 표 미확인)" : "보도자료 본문 확인"} · {entry.review.checkedAt} · {entry.review.sourceLocator}</p>}
     {compact ? <details><summary>공개 의결서 {entry.decisions.length}개 — 공식 원문 링크</summary>{documents}</details> : documents}
   </div>;
 }
