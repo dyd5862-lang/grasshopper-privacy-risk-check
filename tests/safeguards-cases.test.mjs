@@ -24,8 +24,8 @@ test('all reviewed links reference real IDs and unique question/case pairs',()=>
   assert.ok(['direct','reference'].includes(link.relevance));assert.ok(link.reason&&link.checkPoint);
   const review=caseReviews[link.caseId];assert.ok(review.sourceLocator&&review.lawNote&&review.historicalNote&&review.decisionDate);
  }
- assert.deepEqual([caseLinks.length,new Set(caseLinks.map(l=>l.questionId)).size,new Set(caseLinks.map(l=>l.caseId)).size],[49,32,8]);
- assert.equal(caseLinks.filter(l=>l.relevance==='direct').length,35);
+ assert.deepEqual([caseLinks.length,new Set(caseLinks.map(l=>l.questionId)).size,new Set(caseLinks.map(l=>l.caseId)).size],[53,32,10]);
+ assert.equal(caseLinks.filter(l=>l.relevance==='direct').length,39);
 });
 test('case retrieval uses original records/documents, preserves all documents and prioritizes direct links',()=>{
  for(const question of questions){
@@ -34,10 +34,10 @@ test('case retrieval uses original records/documents, preserves all documents an
    assert.deepEqual(entry.record,caseRecords.find(c=>c.id===entry.record.id));
    assert.deepEqual(entry.decisions.map(d=>d.document),publicDecisionsByCase[entry.record.id]??[]);
    if(entry.link.relevance==='reference')referenceSeen=true;else assert.ok(!referenceSeen);
-   for(const {document,review} of entry.decisions){assert.ok(review,document.decisionNo);assert.equal(review.bodyStatus,'unavailable');assert.equal(review.pdfStatus,'unavailable');}
+   for(const {document,review} of entry.decisions){assert.ok(review,document.decisionNo);assert.equal(review.bodyStatus,document.decisionNo.startsWith('제2026-217-39')?'text-only':'unavailable');assert.equal(review.pdfStatus,'unavailable');}
   }
  }
- assert.equal(Object.keys(decisionReviews).length,12);assert.equal(relatedCases('B-01').length,0);
+ assert.equal(Object.keys(decisionReviews).length,14);assert.equal(relatedCases('B-01').length,0);
  assert.equal(relatedCases('N-01').find(e=>e.record.id==='geps-gangbuk-2026').decisions.length,2);
 });
 test('unanswered and excluded questions never produce failure guidance; raw and derived review are distinct',()=>{

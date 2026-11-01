@@ -15,9 +15,9 @@ export function CasesScreen({ setScreen, setSelectedCase, caseTopic, setCaseTopi
               <button className="back-link" onClick={() => setScreen(completed ? "check" : "intro")}>← {completed ? "자가점검으로 돌아가기" : "서비스 안내"}</button>
               <span className="step-label">개인정보위 공식자료 연계</span>
               <h1>조사·처분 사례 찾아보기</h1>
-              <p>보도자료 본문에서 실제 위반사실이 확인된 사례만 연결했습니다. 제목의 키워드만으로 관련성을 판단하지 않습니다.</p>
+              <p>공식 보도자료 또는 공개용 의결서의 확인한 본문에 근거한 사례를 연결했습니다. 제목의 키워드만으로 관련성을 판단하지 않습니다.</p>
             </div>
-            <div className="verified-card"><span>공식자료 확인일</span><b>{formatVerifiedDate(CASE_DATA_VERIFIED_AT)}</b><small>개인정보보호위원회 보도자료 기준</small></div>
+            <div className="verified-card"><span>기존 보도자료 확인일</span><b>{formatVerifiedDate(CASE_DATA_VERIFIED_AT)}</b><small>개인정보보호위원회 보도자료 기준</small></div>
           </div>
 
           <div className="case-principle">

@@ -37,3 +37,20 @@ test('individual HTML review never upgrades full collection or missing decision 
   assert.ok(!modal.includes('문서가 없습니다'));
   assert.ok(modal.includes('record.verifiedAt ?? CASE_DATA_VERIFIED_AT'));
 });
+
+test('decision-only additions retain separate identities, historical rules and limited verification scope', () => {
+  const ids = ['jenertec-2026-217-390', 'sbridge-2026-217-391'];
+  const records = ids.map(id => caseRecords.find(r => r.id === id));
+  assert.deepEqual(records.map(r => r.itemIds), [[6, 12], [8, 14, 25]]);
+  assert.deepEqual(records.map(r => r.sourceType), ['개인정보위 공개용 의결서', '개인정보위 공개용 의결서']);
+  assert.deepEqual(records.map(r => publicDecisionsByCase[r.id][0].decisionNo), ['제2026-217-390호', '제2026-217-391호']);
+  assert.equal(records[0].source, records[1].source);
+  assert.deepEqual(records.map(r => r.source), records.map(r => publicDecisionsByCase[r.id][0].agendaUrl));
+  assert.ok(records.every(r => new URL(r.source).searchParams.get('idxId') === '2026-0710'));
+  assert.ok(records.every(r => !r.dispositions.includes('공표명령')));
+  assert.ok(!records[1].dispositions.includes('시정명령'));
+  assert.match(records[0].laws.join(' '), /2023-6호/);
+  assert.match(records[1].laws.join(' '), /2021-3호/);
+  assert.ok(records.every(r => r.historicalNote.includes('이미지 표') && r.historicalNote.includes('작성일을 최초 공개일로 확정하지')));
+  assert.equal(CASE_DATA_VERIFIED_AT, '2026-09-02');
+});

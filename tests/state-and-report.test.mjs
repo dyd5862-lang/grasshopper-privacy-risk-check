@@ -31,7 +31,7 @@ test('JSON export retains 26 rows, evidence and explicit unanswered with blank n
 });
 test('case search preserves all records, combines filters and handles current-year boundary',()=>{
  const f={caseTopic:'전체',caseInstitution:'전체',caseDisposition:'전체',casePeriod:'all',caseQuery:'',caseYear:'all'};
- assert.equal(filterCases(caseRecords,f).length,111);
+ assert.equal(filterCases(caseRecords,f).length,113);
  const recent=filterCases(caseRecords,{...f,casePeriod:'1'},new Date(2026,8,18));assert.ok(recent.every(r=>r.date>='2025-09-18'));
  const record=caseRecords[0];assert.ok(filterCases(caseRecords,{...f,caseQuery:record.title,caseYear:record.date.slice(0,4)}).some(r=>r.id===record.id));
 });

@@ -1,3 +1,4 @@
+import { decisionSource20260710 } from "./verified-decision-cases-2026-11-01";
 import { PUBLIC_DECISION_COLLECTED_AT, formatVerifiedDate } from "../lib/privacy-risk/dates";
 
 export type PublicDecision = {
@@ -11,6 +12,8 @@ export type PublicDecision = {
 export const publicDecisionCollectedAt = formatVerifiedDate(PUBLIC_DECISION_COLLECTED_AT);
 
 export const publicDecisionsByCase: Record<string, PublicDecision[]> = {
+  "jenertec-2026-217-390": [{ decisionNo: "제2026-217-390호", organization: "㈜제이에너텍", url: decisionSource20260710, agendaUrl: decisionSource20260710, linkType: "agenda" }],
+  "sbridge-2026-217-391": [{ decisionNo: "제2026-217-391호", organization: "㈜에스브릿지", url: decisionSource20260710, agendaUrl: decisionSource20260710, linkType: "agenda" }],
   "historic-2020-01": [
     { decisionNo: "제2020-008-011호", organization: "엘지유플러스 등 4개사", url: "https://www.pipc.go.kr/np/default/agenda.do?idxId=2021-0038&op=view", agendaUrl: "https://www.pipc.go.kr/np/default/agenda.do?idxId=2021-0038&op=view", linkType: "agenda" },
   ],

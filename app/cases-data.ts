@@ -1,5 +1,6 @@
 import { historicalCaseRecords } from "./historical-cases-data";
 import { verifiedCases20261101 } from "./verified-cases-2026-11-01";
+import { decisionCases20261101 } from "./verified-decision-cases-2026-11-01";
 
 export type CaseRecord = {
   id: string;
@@ -18,7 +19,7 @@ export type CaseRecord = {
   learning: string[];
   laws: string[];
   source: string;
-  sourceType: "개인정보위 보도자료";
+  sourceType: "개인정보위 보도자료" | "개인정보위 공개용 의결서";
   historicalNote?: string;
 };
 
@@ -1049,7 +1050,7 @@ const additionalCaseRecords: CaseRecord[] = [
   },
 ];
 
-export const caseRecords: CaseRecord[] = [...verifiedCases20261101, ...additionalCaseRecords, ...backfillCaseRecords, ...originalCaseRecords, ...historicalCaseRecords].sort((a, b) =>
+export const caseRecords: CaseRecord[] = [...decisionCases20261101, ...verifiedCases20261101, ...additionalCaseRecords, ...backfillCaseRecords, ...originalCaseRecords, ...historicalCaseRecords].sort((a, b) =>
   b.date.localeCompare(a.date),
 );
 
