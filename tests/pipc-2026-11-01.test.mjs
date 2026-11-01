@@ -31,8 +31,8 @@ test('individual HTML review never upgrades full collection or missing decision 
   }
   const home = fs.readFileSync(new URL('../app/page.tsx', import.meta.url), 'utf8');
   assert.ok(!home.includes('개인정보보호위원회 공식자료 확인 기준일: 2026. 11. 1.'));
-  assert.ok(home.includes('개인정보보호위원회 공식 보도자료 일부 확인·반영:'));
-  assert.ok(home.includes('공식자료 전체 전수 대조는 진행 중입니다.'));
+  assert.ok(!home.includes('개인정보보호위원회 공식 보도자료 일부 확인·반영:'));
+  assert.ok(!home.includes('공식자료 전체 전수 대조는 진행 중입니다.'));
   const modal = fs.readFileSync(new URL('../components/privacy-risk/CaseModal.tsx', import.meta.url), 'utf8');
   assert.ok(!modal.includes('문서가 없습니다'));
   assert.ok(modal.includes('record.verifiedAt ?? CASE_DATA_VERIFIED_AT'));
