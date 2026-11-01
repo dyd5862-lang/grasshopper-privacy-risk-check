@@ -3,7 +3,6 @@
 import { officialCaseSearchUrl } from "../../app/cases-data";
 import { publicDecisionsByCase } from "../../app/decision-data";
 import { relevanceFor } from "../../lib/privacy-risk/constants";
-import { CASE_DATA_VERIFIED_AT,formatVerifiedDate } from "../../lib/privacy-risk/dates";
 import type { CasePeriod,CaseYear } from "../../lib/privacy-risk/types";
 import { MiniIcon } from "./Icons";
 import type { AssessmentController } from "./useAssessment";
@@ -17,7 +16,6 @@ export function CasesScreen({ setScreen, setSelectedCase, caseTopic, setCaseTopi
               <h1>조사·처분 사례 찾아보기</h1>
               <p>공식 보도자료 또는 공개용 의결서의 확인한 본문에 근거한 사례를 연결했습니다. 제목의 키워드만으로 관련성을 판단하지 않습니다.</p>
             </div>
-            <div className="verified-card"><span>기존 보도자료 확인일</span><b>{formatVerifiedDate(CASE_DATA_VERIFIED_AT)}</b><small>개인정보보호위원회 보도자료 기준</small></div>
           </div>
 
           <div className="case-principle">

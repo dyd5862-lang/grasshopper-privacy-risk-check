@@ -60,9 +60,8 @@ export default function Home() {
           <article className="home-tool-card"><span className="home-card-label">위험과 보호조치 확인</span><h3>개인정보 위험도 분석<br/>자가 점검 도구</h3><p>개인정보 처리 현황을 바탕으로 위험요인과 필요한 보호조치를 점검합니다.</p><p className="home-choice">개인정보 처리에 따른 위험과 보호조치의 적정성을 살펴보고 싶을 때</p><Link className="home-start" href="/risk">위험도 분석 시작하기 <span aria-hidden="true">→</span></Link></article>
           <article className="home-tool-card"><span className="home-card-label">조문별 이행 상태 확인</span><h3>개인정보 안전성 확보조치<br/>자가 점검 도구</h3><p>「개인정보의 안전성 확보조치 기준」에 따른 보호조치 이행 여부를 점검합니다.</p><p className="home-choice">기준의 조문별로 우리 기관·사업자의 이행 상태를 확인하고 싶을 때</p><Link className="home-start" href="/safeguards">안전성 확보조치 점검 시작하기 <span aria-hidden="true">→</span></Link></article>
         </div>
-        <div className="home-source-status" aria-label="공식자료 반영 범위">
-          <p>개인정보보호위원회 공식 보도자료 일부 확인·반영: <time dateTime="2026-11-01">2026. 11. 1.</time></p>
-          <p>공식자료 전체 전수 대조는 진행 중입니다.</p>
+        <div className="home-source-status" aria-label="점검 도구 업데이트">
+          <p>점검 도구 업데이트 : <time dateTime="2026-11-01">2026. 11. 1.</time></p>
         </div>
       </section>
       <aside className="home-help" aria-labelledby="help-title"><span className="home-help-icon" aria-hidden="true">🦗</span><div><p className="section-kicker">메뚜기 도움말</p><h2 id="help-title">어떤 점검부터 시작할까요?</h2><p>개인정보 처리에 따른 위험과 필요한 보호조치를 살펴보려면 <b>‘위험도 분석’</b>을, 안전성 확보조치 기준의 조문별 이행 여부를 확인하려면 <b>‘안전성 확보조치 점검’</b>을 선택하세요.</p><p>필요한 도구부터 시작하고, 두 도구를 함께 활용해 점검 내용을 보완할 수 있습니다.</p></div></aside>
