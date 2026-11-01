@@ -24,8 +24,8 @@ test('all reviewed links reference real IDs and unique question/case pairs',()=>
   assert.ok(['direct','reference'].includes(link.relevance));assert.ok(link.reason&&link.checkPoint);
   const review=caseReviews[link.caseId];assert.ok(review.sourceLocator&&review.lawNote&&review.historicalNote&&review.decisionDate);
  }
- assert.deepEqual([caseLinks.length,new Set(caseLinks.map(l=>l.questionId)).size,new Set(caseLinks.map(l=>l.caseId)).size],[43,32,6]);
- assert.equal(caseLinks.filter(l=>l.relevance==='direct').length,29);
+ assert.deepEqual([caseLinks.length,new Set(caseLinks.map(l=>l.questionId)).size,new Set(caseLinks.map(l=>l.caseId)).size],[49,32,8]);
+ assert.equal(caseLinks.filter(l=>l.relevance==='direct').length,35);
 });
 test('case retrieval uses original records/documents, preserves all documents and prioritizes direct links',()=>{
  for(const question of questions){

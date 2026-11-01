@@ -11,7 +11,9 @@ const decisionModule = await loadTypeScript("../app/decision-data.ts");
 const { checks } = await loadTypeScript("../lib/privacy-risk/checks.ts");
 const caseRecords = caseModule.caseRecords;
 const publicDecisionsByCase = decisionModule.publicDecisionsByCase;
-const existingCaseRecords = caseRecords.filter((record) => !record.id.startsWith("historic-"));
+const addedIds = new Set(["daekyo-2026-10", "younghoon-medical-2026-10"]);
+const baselineCaseRecords = caseRecords.filter(record => !addedIds.has(record.id));
+const existingCaseRecords = baselineCaseRecords.filter((record) => !record.id.startsWith("historic-"));
 const pageSource = fs.readFileSync(new URL("../components/privacy-risk/useAssessment.ts", import.meta.url), "utf8");
 
 const countByItem = (records) => Object.fromEntries(
@@ -24,8 +26,9 @@ const countByItem = (records) => Object.fromEntries(
 test("preserves 53 cases and merges exactly 56 historical cases", () => {
   assert.equal(existingCaseRecords.length, 53);
   assert.equal(historicalCaseRecords.length, 56);
-  assert.equal(caseRecords.length, 109);
-  assert.equal(new Set(caseRecords.map((record) => record.id)).size, 109);
+  assert.equal(baselineCaseRecords.length, 109);
+  assert.equal(caseRecords.length, 111);
+  assert.equal(new Set(caseRecords.map((record) => record.id)).size, 111);
   assert.deepEqual(
     Object.fromEntries(["2020", "2021", "2022", "2023"].map((year) => [
       year,
@@ -41,7 +44,7 @@ test("matches the verified 26-item mapping totals", () => {
     10: 3, 11: 3, 12: 2, 13: 0, 14: 42, 15: 10, 16: 0, 17: 9,
     18: 6, 19: 45, 20: 1, 21: 0, 22: 1, 23: 3, 24: 0, 25: 43, 26: 10,
   });
-  assert.deepEqual(countByItem(caseRecords), {
+  assert.deepEqual(countByItem(baselineCaseRecords), {
     1: 7, 2: 11, 3: 13, 4: 0, 5: 1, 6: 64, 7: 1, 8: 77, 9: 6,
     10: 27, 11: 12, 12: 24, 13: 0, 14: 62, 15: 28, 16: 1, 17: 29,
     18: 8, 19: 81, 20: 9, 21: 0, 22: 2, 23: 11, 24: 16, 25: 75, 26: 21,

@@ -878,6 +878,8 @@ html[data-theme="dark"] .case-badges > .decision-badge { background: #453a20; co
 .home-tools, .home-usage { scroll-margin-top:24px; }
 .home-tools > h2 { font-size:calc(19px + var(--reader-text-delta)); margin:0 0 20px; }
 .home-card-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.home-source-status { margin-top:16px; color:var(--muted); font-size:calc(13px + var(--reader-text-delta)); line-height:1.6; overflow-wrap:anywhere; }
+.home-source-status p { margin:3px 0; }
 .home-tool-card { display:flex; flex-direction:column; padding:30px; border:1px solid var(--line); border-radius:20px; background:var(--paper); box-shadow:var(--shadow); }
 .home-card-label { color:var(--green); font-size:calc(13px + var(--reader-text-delta)); font-weight:800; }
 .home-tool-card h3 { font-size:calc(25px + var(--reader-text-delta)); line-height:1.4; margin:12px 0; word-break:keep-all; overflow-wrap:anywhere; }

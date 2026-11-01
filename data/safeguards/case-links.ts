@@ -3,6 +3,18 @@ export type CaseLink = { questionId: string; caseId: string; relevance: 'direct'
 export type CaseReview = { checkedAt: string; decisionDate: string; sourceLocator: string; lawNote: string; historicalNote: string };
 export type DecisionReview = { listingStatus: 'confirmed' | 'unavailable'; identityStatus: 'filename-date' | 'unconfirmed'; bodyStatus: 'unavailable'; pdfStatus: 'unavailable'; checkedAt: string; note: string };
 export const caseReviews: Record<string, CaseReview> = {
+  "daekyo-2026-10": {
+    checkedAt: "2026-11-01", decisionDate: "2026-10-28",
+    sourceLocator: "HTML 본문의 대교 조사 결과·처분 문단(첨부 본문 미확인)",
+    lawNote: "안전조치 의무 위반을 보도자료로 확인. 세부 처분 조문·고시 버전은 미확인.",
+    historicalNote: "현행 문항과 사실관계를 대응하며 당시 조문 동일성을 확정하지 않습니다. 보도자료의 의결일 날짜와 요일 표기에 불일치가 있어 날짜만 기록합니다.",
+  },
+  "younghoon-medical-2026-10": {
+    checkedAt: "2026-11-01", decisionDate: "2026-10-28",
+    sourceLocator: "HTML 본문의 영훈의료재단 조사 결과·처분 문단(첨부 본문 미확인)",
+    lawNote: "안전조치 의무 위반을 보도자료로 확인. 세부 처분 조문·고시 버전은 미확인.",
+    historicalNote: "현행 문항과 사실관계를 대응하며 당시 조문 동일성을 확정하지 않습니다. 보도자료의 의결일 날짜와 요일 표기에 불일치가 있어 날짜만 기록합니다.",
+  },
   "geps-gangbuk-2026": {
     "checkedAt": "2026-09-20",
     "decisionDate": "2026-03-25",
@@ -145,6 +157,12 @@ export const decisionReviews: Record<string, DecisionReview> = {
   }
 };
 export const caseLinks: CaseLink[] = [
+  { questionId: "M-24", caseId: "daekyo-2026-10", relevance: "direct", reason: "보호책임자의 계획 이행 점검 소홀.", checkPoint: "이행 점검의 실효성을 확인하세요." },
+  { questionId: "N-01", caseId: "daekyo-2026-10", relevance: "direct", reason: "관계사 서버의 불필요한 DB 접근 허용.", checkPoint: "접근 허용 범위를 확인하세요." },
+  { questionId: "N-02", caseId: "daekyo-2026-10", relevance: "direct", reason: "탐지 안내 이후 분석·차단 미흡.", checkPoint: "경보 후속조치를 확인하세요." },
+  { questionId: "E-01", caseId: "younghoon-medical-2026-10", relevance: "direct", reason: "회원 비밀번호 저장 암호화 미흡.", checkPoint: "안전한 일방향 암호화를 확인하세요." },
+  { questionId: "M-26", caseId: "younghoon-medical-2026-10", relevance: "direct", reason: "웹 취약점 점검·개선 미흡.", checkPoint: "진단과 보완 이력을 확인하세요." },
+  { questionId: "N-05", caseId: "younghoon-medical-2026-10", relevance: "direct", reason: "홈페이지 입력값 검증 등 유출 방지 미흡.", checkPoint: "SQL 인젝션 방어를 확인하세요." },
   {
     "questionId": "A-02",
     "caseId": "geps-gangbuk-2026",
