@@ -1,0 +1,20 @@
+{
+  "base_commit": "6470709f8f792377be563bea423916689b84fb49",
+  "cutoff": "2026-11-01 Asia/Seoul",
+  "recorded_at": "2026-11-01T11:21:57.601422+00:00",
+  "existing_cases": 109,
+  "phase1_added_cases": 2,
+  "fully_verified_cases": 0,
+  "scoped_corrections": 3,
+  "all_cases_full_review_pending": 111,
+  "decision_links": 72,
+  "press_period_complete": false,
+  "decision_disclosure_survey_complete": false,
+  "observed_new_decision_posts": 5,
+  "observed_attachment_document_groups": 20,
+  "observed_physical_files": 40,
+  "downloaded_document_bodies": 0,
+  "new_decision_case_count": null,
+  "press_observed_posts": 10,
+  "press_period_total": null
+}
