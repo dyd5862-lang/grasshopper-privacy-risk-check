@@ -1,8 +1,10 @@
 import { historicalCaseRecords } from "./historical-cases-data";
+import { verifiedCases20261101 } from "./verified-cases-2026-11-01";
 
 export type CaseRecord = {
   id: string;
   date: string;
+  verifiedAt?: string;
   title: string;
   targets: string;
   institution: "공공기관" | "민간기업";
@@ -1047,7 +1049,7 @@ const additionalCaseRecords: CaseRecord[] = [
   },
 ];
 
-export const caseRecords: CaseRecord[] = [...additionalCaseRecords, ...backfillCaseRecords, ...originalCaseRecords, ...historicalCaseRecords].sort((a, b) =>
+export const caseRecords: CaseRecord[] = [...verifiedCases20261101, ...additionalCaseRecords, ...backfillCaseRecords, ...originalCaseRecords, ...historicalCaseRecords].sort((a, b) =>
   b.date.localeCompare(a.date),
 );
 
