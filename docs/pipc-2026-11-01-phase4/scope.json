@@ -1,0 +1,39 @@
+{
+  "cutoff_kst": "2026-11-01",
+  "execution_kst_date": "2026-11-02",
+  "production_commit": "0c0abfd7d752206ecaa9c52f13d8276e7628b857",
+  "production_deployment": "dpl_DSuQU8FUsGvKco49rKMSqpfvuWU9",
+  "phase1_complete": true,
+  "full_audit_complete": false,
+  "full_update_complete": false,
+  "phase2_final_production_complete": false,
+  "runtime": {
+    "cases": 113,
+    "decision_links": 74,
+    "safeguard_cases": 10,
+    "safeguard_links": 53,
+    "basic_safeguard_questions": 113,
+    "conditional_risk_questions": 29
+  },
+  "current_law_index": {
+    "reported": 4253,
+    "retrieved": 4253,
+    "pages": 43,
+    "unique_ids": 4253,
+    "unnumbered": 261,
+    "cutoff_publication_inventory": false,
+    "csv_uncompressed_sha256": "531e990875e3415feb2d2a36f09f45e641867821b76478964cdf07d518cf148f"
+  },
+  "existing_decisions_72": {
+    "previous_texts": 42,
+    "new_exact_number_matches": 0,
+    "remaining": 30
+  },
+  "new_decisions_20": {
+    "text": 20,
+    "with_reason_previously": 18,
+    "complete_originals": 0
+  },
+  "press_period_inventory_complete": false,
+  "full_completion_date_published": false
+}
