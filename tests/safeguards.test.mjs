@@ -14,10 +14,10 @@ const response=(s,id,answer,reason='',evidenceRef='')=>{s.responses[id]={answer,
 const scope=(s,id,value='YES')=>{s.scopes[id]={value,reason:'대상범위 확인',evidenceRef:'내부 확인문서',context:contextKey(s)};return s;};
 const riskState=()=>sample({riskIntent:'YES',riskSubject:'nonuser',riskType:'otherUid',riskLocation:'internal',nonUserInfo:'YES',otherUid:'YES',internal:'YES',dpia:'NO',outsourcing:'YES',web:'YES'});
 
-test('157 IDs and exact counts: 15 + 89 + 24 + 26 + 3; 113 core',()=>{
- assert.deepEqual([applicabilityQuestions.length,generalQuestions.length,publicQuestions.length,riskQuestions.filter(q=>Number(q.id.slice(2))<=26).length,riskQuestions.filter(q=>Number(q.id.slice(2))>=27).length],[15,89,24,26,3]);
- const all=[...applicabilityQuestions,...questions];assert.equal(all.length,157);assert.equal(new Set(all.map(q=>q.id)).size,157);assert.equal(generalQuestions.length+publicQuestions.length,113);
- const expected={F:15,B:1,M:27,A:7,N:8,I:6,E:14,L:8,V:4,P:4,D:3,O:3,X:4,S:10,H:6,T:3,G:5,R:29};
+test('161 IDs and exact counts: 15 + 89 + 28 + 26 + 3; 117 core',()=>{
+ assert.deepEqual([applicabilityQuestions.length,generalQuestions.length,publicQuestions.length,riskQuestions.filter(q=>Number(q.id.slice(2))<=26).length,riskQuestions.filter(q=>Number(q.id.slice(2))>=27).length],[15,89,28,26,3]);
+ const all=[...applicabilityQuestions,...questions];assert.equal(all.length,161);assert.equal(new Set(all.map(q=>q.id)).size,161);assert.equal(generalQuestions.length+publicQuestions.length,117);
+ const expected={F:15,B:1,M:27,A:7,N:8,I:6,E:14,L:8,V:4,P:4,D:3,O:3,X:4,S:11,W:3,H:6,T:3,G:5,R:29};
  assert.deepEqual(all.map(q=>q.id).sort(),Object.entries(expected).flatMap(([p,n])=>Array.from({length:n},(_,i)=>`${p}-${String(i+1).padStart(2,'0')}`)).sort());
 });
 test('every source cell is preserved exactly, including question, ID, article, applicability, evidence and criteria',()=>{
@@ -84,7 +84,7 @@ test('L1/L2 mutually exclusive and both retained unknown when eligibility unreso
 });
 test('exactly 13 delayed rows switch on 2026-11-01; R-20 never delayed',()=>{
  const expected=['M-13','M-14','A-01','A-07','N-03','N-04',...Array.from({length:7},(_,i)=>`L-0${i+1}`)].sort();
- assert.deepEqual(questions.filter(q=>q.effectiveFrom).map(q=>q.id).sort(),expected);
+ assert.deepEqual(questions.filter(q=>q.effectiveFrom==='2026-11-01').map(q=>q.id).sort(),expected);
  for(const id of expected){assert.equal(evaluate(q(id),sample({},'2026-10-31')).bucket,'readiness');assert.equal(evaluate(q(id),sample({},'2026-11-01')).bucket,'general');}
  assert.equal(evaluate(q('R-20'),riskState()).bucket,'risk');
 });
@@ -121,10 +121,10 @@ test('R refuses conclusions with unanswered/review/failure; all confirmed never 
  for(const rq of riskQuestions){scope(s,rq.id);response(s,rq.id,'PASS');}
  rows=riskQuestions.map(q=>evaluate(q,s));assert.match(riskConclusion(rows,s),/함께 검토해야/);assert.doesNotMatch(riskConclusion(rows,s),/암호화하지 않아도|미적용 가능/);
  response(s,'R-29','NEEDS_REVIEW');assert.match(riskConclusion(riskQuestions.map(q=>evaluate(q,s)),s),/점검 미완료/);
- response(s,'R-10','FAIL');assert.match(riskConclusion(riskQuestions.map(q=>evaluate(q,s)),s),/보호조치를 시행하거나/);
+ response(s,'R-10','FAIL');assert.match(riskConclusion(riskQuestions.map(q=>evaluate(q,s)),s),/암호화하여야/);
 });
-test('four reporting buckets separated with no legal score and 142 detailed rows retained',()=>{
- const s=sample({},'2026-10-31');const report=createReport(s,questions.map(q=>evaluate(q,s)));assert.deepEqual(Object.keys(report.summary),['general','public','risk','readiness']);assert.equal(report.results.length,142);assert.equal(report.state.profile.organization,'');assert.equal(report.state.profile.systemName,'');assert.equal(report.state.profile.fileName,'');assert.ok(report.results.some(r=>r.mode==='준비평가'));assert.equal(report.score,undefined);
+test('four reporting buckets separated with no legal score and 146 detailed rows retained',()=>{
+ const s=sample({},'2026-10-31');const report=createReport(s,questions.map(q=>evaluate(q,s)));assert.deepEqual(Object.keys(report.summary),['general','public','risk','readiness']);assert.equal(report.results.length,146);assert.equal(report.state.profile.organization,'');assert.equal(report.state.profile.systemName,'');assert.equal(report.state.profile.fileName,'');assert.ok(report.results.some(r=>r.mode==='시행일 미도래'));assert.equal(report.score,undefined);
 });
 test('storage roundtrip and reset isolation retain original risk data',()=>{
  const s=response(sample(),'B-01','PASS','근거','문서번호');assert.deepEqual(parseState(JSON.stringify(s)),s);

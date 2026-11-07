@@ -17,7 +17,8 @@ export function conditions(s: State): Conditions {
    G = ['public','large','mid'].includes(entity) ? n >= 100000 ? 'YES':'NO' : ['sme','small','group'].includes(entity) ? n >= 1000000 ? 'YES':'NO' : 'NO';
  }
  const designation = fact(s,'designated') === 'YES' && !s.factNotes['F-11']?.trim() ? 'UNKNOWN' : fact(s,'designated');
- const P = and(designation, fact(s,'operator'));
+ const publicEntity: Tri = !entity || entity === 'UNKNOWN' ? 'UNKNOWN' : entity === 'public' ? 'YES' : 'NO';
+ const P = and(publicEntity, designation, fact(s,'operator'));
  const U = and(designation, fact(s,'userAgency'), fact(s,'directAccounts'));
  const R = and(fact(s,'riskIntent'),equals(s,'riskSubject','nonuser'), equals(s,'riskType','otherUid'), equals(s,'riskLocation','internal'), fact(s,'nonUserInfo'),fact(s,'otherUid'),fact(s,'internal'),not(fact(s,'dpia')));
  return {
@@ -30,7 +31,7 @@ export function conditions(s: State): Conditions {
  };
 }
 export function contextKey(s: State): string {
- return JSON.stringify([s.profile.date, Object.entries(s.facts).sort(([a],[b])=>a.localeCompare(b)), s.factNotes['F-11'] || '']);
+ return JSON.stringify([s.sourceVersion, s.profile.date, Object.entries(s.facts).sort(([a],[b])=>a.localeCompare(b)), s.factNotes['F-11'] || '']);
 }
 // All gates are tied to named preconditions; remaining asset/event scope is confirmed per row.
 export function gate(q: Question, s: State): { value: Tri; needsScope: boolean; reason: string } {
@@ -66,7 +67,7 @@ export function gate(q: Question, s: State): { value: Tri; needsScope: boolean; 
    value=c.M.value;
    const extra: Record<string,Tri>={'M-06':system,'M-07':device,'M-08':encryption,'M-09':system,'M-10':device,'M-12':or(f('physical'),f('paper'),f('media')),'M-13':f('output'),'M-17':f('outsourcing'),'M-26':device};
    if(id in extra)value=and(value,extra[id]);
- } else if(id.startsWith('S-')) value=c.P.value;
+ } else if(id.startsWith('S-') || id.startsWith('W-')) value=c.P.value;
  else if(id.startsWith('R-')) {
    value=c.R.value;
    if(id==='R-03')value=and(value,f('outsourcing'));

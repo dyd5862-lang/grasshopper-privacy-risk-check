@@ -1,5 +1,6 @@
 "use client";
 
+import { guideTitle, noticeTitle, officialGuideUrl } from "../../app/guide-pages";
 import Image from "next/image";
 import { answerLabel,serviceName } from "../../lib/privacy-risk/constants";
 import { CASE_DATA_VERIFIED_AT,formatVerifiedDate } from "../../lib/privacy-risk/dates";
@@ -7,7 +8,7 @@ import { privacyNoticeUrl } from "../../lib/privacy-risk/legal-links";
 import { BrandMark,MiniIcon } from "./Icons";
 import type { AssessmentController } from "./useAssessment";
 
-export function ResultScreen({ setScreen, profile, answers, evidence, setExpanded, setSelectedCase, applicableChecks, completed, counts, evaluation, attentionItems, casesForItem, openCases, exportData }: Pick<AssessmentController, "setScreen" | "profile" | "answers" | "evidence" | "setExpanded" | "setSelectedCase" | "applicableChecks" | "completed" | "counts" | "evaluation" | "attentionItems" | "casesForItem" | "openCases" | "exportData">) {
+export function ResultScreen({ originalSourceVersion, encryptionResult, setScreen, profile, answers, evidence, setExpanded, setSelectedCase, applicableChecks, completed, counts, evaluation, attentionItems, casesForItem, openCases, exportData }: Pick<AssessmentController, "originalSourceVersion" | "encryptionResult" | "setScreen" | "profile" | "answers" | "evidence" | "setExpanded" | "setSelectedCase" | "applicableChecks" | "completed" | "counts" | "evaluation" | "attentionItems" | "casesForItem" | "openCases" | "exportData">) {
   return (<section className="workspace result-workspace">
           <div className="result-heading no-print">
             <div><button className="back-link" onClick={() => setScreen("check")}>← 점검항목 돌아가기</button><span className="step-label">3 / 3 · 결과 및 개선계획</span><h1>메뚜기 개인정보 위험도 분석 결과</h1><p>{profile.organization || "기관명 미입력"} · {profile.systemName || "시스템명 미입력"} · {new Date().toLocaleDateString("ko-KR")}</p></div>
@@ -16,10 +17,11 @@ export function ResultScreen({ setScreen, profile, answers, evidence, setExpande
 
           <div className={`overall-card ${evaluation.level}`}>
             <div className="overall-mascot"><Image src="/images/grasshopper-success.webp" alt="점검 완료 문서와 방패를 든 메뚜기 안내자" width={1254} height={1254} /><span>{evaluation.symbol}</span></div>
-            <div className="overall-copy"><span className="target-kicker">종합 판정</span><h2>{evaluation.message}</h2><p>{counts.no > 0 ? "안내서상 점검항목 중 하나라도 ‘아니요’이면 암호화에 상응하는 충분한 안전조치가 있다고 보기 어렵습니다. 해당 개인정보파일을 암호화하거나 미흡 조치를 보완해야 합니다." : "현재 답변을 기준으로 한 자가점검 결과입니다. 실제 설정과 증적, 최신 현행 법령을 최종 확인하세요."}</p></div>
+            <div className="overall-copy"><span className="target-kicker">종합 판정</span><h2>{evaluation.message}</h2><p>{counts.no > 0 ? "안내서상 점검항목 중 하나라도 ‘아니요’이면 암호화에 상응하는 충분한 안전조치가 있다고 보기 어렵습니다. 암호화 미적용 경로의 대상이라면 미흡이 남아 있는 해당 개인정보파일을 암호화하여야 합니다. 보완 후 재분석할 수 있습니다." : "현재 답변을 기준으로 한 자가점검 결과입니다. 실제 설정과 증적, 최신 현행 법령을 최종 확인하세요."}</p></div>
             <div className="overall-level"><small>우선순위</small><b>{evaluation.priority}</b><span>자가점검 보조지표</span></div>
           </div>
 
+          <section className="legal-note"><div><b>암호화 판단</b><p>{encryptionResult}</p><p>{guideTitle} · {noticeTitle} · 점검 기준일: {profile.assessmentDate||"추가 확인"}</p>{originalSourceVersion!=="2026.11"&&<p>이전 저장 기준: {originalSourceVersion}. 기존 답변은 보존했으며 현재 안내서 기준으로 표시합니다. 추가된 적용조건을 확인하세요.</p>}<a href={officialGuideUrl} target="_blank" rel="noreferrer">공식 안내서·PDF 첨부</a></div></section>
           <div className="metric-grid">
             <article><span className="metric-dot green" /><div><small>충족</small><b>{counts.yes - counts.evidenceMissing}</b></div><p>답변과 증적 확인</p></article>
             <article><span className="metric-dot yellow" /><div><small>증적 미확인</small><b>{counts.evidenceMissing}</b></div><p>‘예’이나 증적 없음</p></article>
@@ -62,7 +64,7 @@ export function ResultScreen({ setScreen, profile, answers, evidence, setExpande
 
           <section className="print-report">
             <header><BrandMark /><div><span>개인정보 보호조치 자가점검 및 위험도 분석 지원 서비스</span><h1>{serviceName} 결과보고서</h1></div><p>작성일 {new Date().toLocaleDateString("ko-KR")}</p></header>
-            <h2>Ⅰ. 위험도 분석 개요</h2>
+            <p>{guideTitle} · {noticeTitle}<br/>점검 기준일: {profile.assessmentDate||"추가 확인"} · 이전 저장 기준: {originalSourceVersion}</p><h2>Ⅰ. 위험도 분석 개요</h2>
             <table><tbody><tr><th>기관명</th><td>{profile.organization || "-"}</td><th>기관 유형</th><td>{profile.organizationType}</td></tr><tr><th>대상 시스템</th><td>{profile.systemName || "-"}</td><th>개인정보파일</th><td>{profile.fileName || "-"}</td></tr><tr><th>처리 목적</th><td colSpan={3}>{profile.purpose || "-"}</td></tr><tr><th>정보주체 수</th><td>{profile.dataSubjects ? `${Number(profile.dataSubjects).toLocaleString()}명` : "-"}</td><th>취급자 수</th><td>{profile.handlers ? `${Number(profile.handlers).toLocaleString()}명` : "-"}</td></tr></tbody></table>
             <h2>Ⅱ. 개인정보파일 현황</h2>
             <table><tbody><tr><th>고유식별정보</th><td>{profile.identifiers.join(", ") || "해당 없음"}</td><th>저장 방식</th><td>{{ all: "모두 암호화", partial: "일부 암호화", none: "암호화하지 않음", unknown: "확인 필요" }[profile.storage]}</td></tr><tr><th>민감정보</th><td>{profile.sensitive ? "처리" : "미처리"}</td><th>홈페이지</th><td>{profile.website ? "운영" : "미운영"}</td></tr></tbody></table>
@@ -71,9 +73,9 @@ export function ResultScreen({ setScreen, profile, answers, evidence, setExpande
             <table className="report-table"><thead><tr><th>번호</th><th>점검항목</th><th>결과</th><th>증적</th><th>안내서</th></tr></thead><tbody>{applicableChecks.map((item) => <tr key={item.id}><td>{item.id}</td><td>{item.question}</td><td>{answers[item.id] ? answerLabel[answers[item.id]] : "미답변"}</td><td>{(evidence[item.id] ?? []).map((entry) => entry.title).join(", ") || "-"}</td><td>{item.page}</td></tr>)}</tbody></table>
             <h2>Ⅳ. 주요 미흡사항 및 개선계획</h2>
             {attentionItems.length ? attentionItems.map((item) => { const relatedCases = casesForItem(item.id); return <div className="report-action" key={item.id}><h3>{item.id}. {item.question}</h3><p><b>현재 상태</b> {answers[item.id] === "no" ? "미흡" : answers[item.id] === "yes" ? "증적 미확인" : "추가 확인 필요"}</p><p><b>개선 우선순위</b> {item.priority}</p><p><b>권고 조치</b> {item.action}</p><p><b>관련 근거</b> {item.law} / {item.standard} / {item.page}</p>{relatedCases.length > 0 && <div><b>참고 조사·처분 사례 ({relatedCases.length}건)</b><ul>{relatedCases.map((record) => <li key={record.id}>{record.title} ({record.date}, {record.sourceType}) — {record.relation}</li>)}</ul></div>}</div>; }) : <p>현재 입력 기준 주요 미흡사항 없음.</p>}
-            <h2>Ⅴ. 위험도 분석 결과</h2>
+            <h2>Ⅴ. 위험도 분석 결과</h2><p>{encryptionResult}</p>
             <p>{evaluation.message} · 우선순위 {evaluation.priority}</p>
-            <p>{counts.no > 0 ? "위험도 분석 점검항목에 ‘아니요’가 존재합니다. 안내서에 따라 암호화에 상응하는 충분한 안전조치가 이루어졌다고 보기 어려우므로 미흡조치를 이행하거나 해당 개인정보파일을 암호화해야 합니다." : "현재 입력 기준 ‘아니요’ 항목은 없습니다. 다만 증적의 적정성과 실제 보호조치 이행 여부를 개인정보 보호책임자 또는 해당 부서장이 최종 확인해야 합니다."}</p>
+            <p>{counts.no > 0 ? "위험도 분석 점검항목에 ‘아니요’가 존재합니다. 안내서에 따라 암호화에 상응하는 충분한 안전조치가 이루어졌다고 보기 어려우므로 암호화 미적용 경로의 대상이라면 미흡이 남아 있는 해당 개인정보파일을 암호화하여야 합니다. 보완 후 재분석할 수 있습니다." : "현재 입력 기준 ‘아니요’ 항목은 없습니다. 다만 증적의 적정성과 실제 보호조치 이행 여부를 개인정보 보호책임자 또는 해당 부서장이 최종 확인해야 합니다."}</p>
             <footer>본 결과는 개인정보처리자의 개인정보 보호조치 이행 현황을 스스로 확인하기 위한 자가점검 결과입니다. 행정기관의 공식적인 법 위반 판단 또는 처분 결과를 의미하지 않습니다. 법령은 점검일 현재 시행 중인 규정을 기준으로 확인하여야 합니다.</footer>
           </section>
         </section>);

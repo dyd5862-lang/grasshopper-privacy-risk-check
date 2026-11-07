@@ -18,6 +18,7 @@ export function ProfileScreen({ setScreen, profile, setProfile, targetStatus, up
               <div className="form-section">
                 <div className="form-section-title"><span>01</span><div><h2>기본정보</h2><p>점검 결과보고서의 기본정보로 사용됩니다.</p></div></div>
                 <div className="form-grid">
+                  <label>점검 기준일<input type="date" value={profile.assessmentDate??''} onChange={e=>setProfile({...profile,assessmentDate:e.target.value})}/></label>
                   <label>기관명 또는 사업자명<input value={profile.organization} onChange={(e) => setProfile({ ...profile, organization: e.target.value })} placeholder="예: ○○기관" /></label>
                   <label>기관 유형<select value={profile.organizationType} onChange={(e) => setProfile({ ...profile, organizationType: e.target.value })}>{["공공기관", "대기업", "중견기업", "중소기업", "소상공인", "개인", "단체", "기타"].map((item) => <option key={item}>{item}</option>)}</select></label>
                   <label>개인정보처리시스템명<input value={profile.systemName} onChange={(e) => setProfile({ ...profile, systemName: e.target.value })} placeholder="예: 민원관리시스템" /></label>
@@ -35,6 +36,11 @@ export function ProfileScreen({ setScreen, profile, setProfile, targetStatus, up
                     <button key={identifier} className={profile.identifiers.includes(identifier) ? "selected" : ""} onClick={() => updateIdentifier(identifier)}><span>{profile.identifiers.includes(identifier) ? "✓" : ""}</span>{identifier}</button>
                   ))}
                 </div>
+                <div className="form-grid">
+                  <label>분석할 파일의 정보주체<select value={profile.subjectType??'unknown'} onChange={e=>setProfile({...profile,subjectType:e.target.value as Profile['subjectType']})}><option value="unknown">추가 확인</option><option value="nonuser">정보통신서비스 이용자가 아닌 정보주체</option><option value="user">정보통신서비스 이용자</option></select></label>
+                  <label>분석할 정보의 저장 위치<select value={profile.storageLocation??'unknown'} onChange={e=>setProfile({...profile,storageLocation:e.target.value as Profile['storageLocation']})}><option value="unknown">추가 확인</option><option value="internal">내부망</option><option value="internet">인터넷망</option><option value="dmz">DMZ</option></select></label>
+                  <label>개인정보 영향평가 대상 공공기관 여부<select value={profile.dpia??'unknown'} onChange={e=>setProfile({...profile,dpia:e.target.value as Profile['dpia']})}><option value="unknown">추가 확인</option><option value="yes">해당</option><option value="no">비해당</option></select></label>
+                </div><p>기관에 여러 유형이 있으면 파일·정보유형별로 나누어 점검하세요. 외부망 연결 여부와 DB 저장 위치는 별도로 확인합니다.</p>
                 <label className="field-label">선택한 고유식별정보의 저장 방식</label>
                 <div className="radio-cards">
                   {[

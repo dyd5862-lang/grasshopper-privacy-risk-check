@@ -12,6 +12,10 @@ export const defaultReaderPreferences: ReaderPreferences = {
 export const readerPreferencesKey = "grasshopper-reader-preferences-v1";
 
 export const initialProfile: Profile = {
+  assessmentDate: "",
+  subjectType: "unknown",
+  storageLocation: "unknown",
+  dpia: "unknown",
   organization: "",
   organizationType: "공공기관",
   systemName: "",

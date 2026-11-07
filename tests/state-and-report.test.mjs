@@ -12,7 +12,7 @@ const {privacyNoticeArticleLinks,privacyLawReaderArticleLinks}=await load('../li
 function store(){const m=new Map();return {getItem:k=>m.get(k)??null,setItem:(k,v)=>m.set(k,v),removeItem:k=>m.delete(k)};}
 test('restores answers, evidence, blank profile and screen with legacy key',()=>{
  const s=store(),state={profile:initialProfile,answers:{1:'yes'},evidence:{1:[{title:'테스트 증적',note:'',owner:'',date:'2026-09-18'}]},screen:'check'};
- saveAssessment(s,state);assert.deepEqual(loadAssessment(s),state);
+ saveAssessment(s,state);assert.deepEqual(loadAssessment(s),{...state,sourceVersion:'2026.11',originalSourceVersion:'2026.11'});
 });
 test('reset removes assessment even after automatic save; reader preferences survive',()=>{
  const s=store();saveAssessment(s,{profile:initialProfile,answers:{1:'no'},evidence:{},screen:'result'});

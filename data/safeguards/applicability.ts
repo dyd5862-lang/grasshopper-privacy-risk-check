@@ -3,7 +3,7 @@ import type { Question } from "../../lib/safeguards/types";
 export const applicabilityQuestions: Question[] = [
   {
     "id": "F-01",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제3조, 제4조제1항, 제7조제6항, 제11조",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -22,7 +22,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-02",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제4조제1항 단서",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -41,7 +41,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-03",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제7조제6항, 제11조",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -60,7 +60,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-04",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제2조제1호",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -79,7 +79,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-05",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제2조제2호, 제7조",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -98,7 +98,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-06",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제7·8조",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -117,7 +117,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-07",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제7조제3~5항",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -136,7 +136,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-08",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제6조의2제1항",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -155,7 +155,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-09",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제6조의2",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -174,7 +174,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-10",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제8조제1항",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -193,7 +193,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-11",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제14조",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -212,9 +212,9 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-12",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
-    "article": "제15~17조, 영 제30조의2",
+    "article": "제15~18조, 영 제30조의2",
     "sourcePages": "대응표 제2절 및 각 조문",
     "question": "운영·개발배포·이용 중 어떤 역할이며 계정을 직접 관리하는가?",
     "applicability": "운영기관 P, 계정 직접 관리 이용기관 U를 구분. 표준배포형은 실질 운영역할도 확인",
@@ -227,11 +227,11 @@ export const applicabilityQuestions: Question[] = [
     "scopeKey": "시스템",
     "section": "적용조건 확인표",
     "group": "applicability",
-    "sourceRow": "|F-12|제15~17조, 영 제30조의2|운영·개발배포·이용 중 어떤 역할이며 계정을 직접 관리하는가?|운영기관 P, 계정 직접 관리 이용기관 U를 구분. 표준배포형은 실질 운영역할도 확인|위수탁·운영 관계, 업무분장, 권한관리 절차|"
+    "sourceRow": "|F-12|제15~18조, 영 제30조의2|운영·개발배포·이용 중 어떤 역할이며 계정을 직접 관리하는가?|운영기관 P, 계정 직접 관리 이용기관 U를 구분. 표준배포형은 실질 운영역할도 확인|위수탁·운영 관계, 업무분장, 권한관리 절차|"
   },
   {
     "id": "F-13",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제6조제2·5항, 제10·12·13조",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -250,7 +250,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-14",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "제7조제3항제2호",
     "sourcePages": "대응표 제2절 및 각 조문",
@@ -269,7 +269,7 @@ export const applicabilityQuestions: Question[] = [
   },
   {
     "id": "F-15",
-    "sourceVersion": "2025-9호 / 안내서 2025.11 / 대응표 1.0 (2026-09-18)",
+    "sourceVersion": "2026-9호 / 안내서 2026.11 / 대응표 2.0 (2026-11-07)",
     "basisType": "사전 확인",
     "article": "부칙",
     "sourcePages": "대응표 제2절 및 각 조문",

@@ -116,8 +116,8 @@ test("preserves 26 checklist definitions: institution 11 / system 15", () => {
   assert.equal(scopes.filter(x=>x==="system").length,15);
 });
 
-test("preserves every original checklist question, explanation, reference, evidence and action", async () => {
+test("preserves original checklist content apart from documented 2026 wording and page changes", async () => {
   const { createHash } = await import('node:crypto');
   const expected=JSON.parse(fs.readFileSync(new URL('./preserved-data.json',import.meta.url),'utf8'));
-  assert.equal(createHash('sha256').update(JSON.stringify(checks)).digest('hex'),expected.checks);
+  assert.equal(createHash('sha256').update(JSON.stringify(checks.map(item=>({...item, evidence:item.evidence.map(e=>e.replace('유출사고 대응계획','침해사고 대응계획')), question:item.question.replace('유출사고 대응계획','침해사고 대응계획').replace('보안서약서 요구','보안서약서 집행'), page:item.page.replace(/\d+/g,n=>String(Number(n)-6))})))).digest('hex'),expected.checks);
 });

@@ -1,7 +1,8 @@
+import { guideVersion } from '../../app/guide-pages';
 import { defaultReaderPreferences,initialProfile,readerPreferencesKey } from './constants';
 import type { Answer,Evidence,Profile,ReaderPreferences,Screen } from './types';
 export const assessmentStorageKey = 'privacy-risk-self-check-v1';
-export type AssessmentState = {profile: Profile; answers: Record<number, Answer>; evidence: Record<number, Evidence[]>; screen: Screen};
+export type AssessmentState = {sourceVersion?: string; originalSourceVersion?: string; profile: Profile; answers: Record<number, Answer>; evidence: Record<number, Evidence[]>; screen: Screen};
 type Store = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 export function clearAssessment(store: Store) {
   try { store.removeItem(assessmentStorageKey); } catch { /* Storage may be disabled. */ }
@@ -13,6 +14,7 @@ export function loadAssessment(store: Store): AssessmentState | null {
     const parsed = JSON.parse(raw);
     const profile = parsed.profile ?? {};
     return {
+      sourceVersion: parsed.sourceVersion??'2025.11', originalSourceVersion: parsed.originalSourceVersion??parsed.sourceVersion??'2025.11',
       profile: {...initialProfile,...profile,
         organization: typeof profile.organization === 'string' ? profile.organization : '',
         systemName: typeof profile.systemName === 'string' ? profile.systemName : '',
@@ -27,7 +29,7 @@ export function saveAssessment(store: Store, state: AssessmentState) {
   if (state.screen === 'intro' && !Object.keys(state.answers).length && !Object.keys(state.evidence).length && JSON.stringify(state.profile) === JSON.stringify(initialProfile)) {
     clearAssessment(store); return;
   }
-  try { store.setItem(assessmentStorageKey, JSON.stringify(state)); } catch { /* Keep the current in-memory assessment usable. */ }
+  try { store.setItem(assessmentStorageKey, JSON.stringify({...state,sourceVersion:guideVersion})); } catch { /* Keep the current in-memory assessment usable. */ }
 }
 export function loadReaderPreferences(store: Store): ReaderPreferences {
   try {
