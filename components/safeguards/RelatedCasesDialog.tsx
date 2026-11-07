@@ -36,7 +36,7 @@ export function RelatedCasesDialog({question,initialCaseId,onClose}:{question:Qu
           <section className={styles.relation}><h4>현재 문항과 연결한 이유</h4><p>{entry.link.reason}</p><h4>점검 시 확인할 사항 · 도구가 정리한 설명</h4><p>{entry.link.checkPoint}</p></section>
           <section><h4>사건 개요 · {entry.record.sourceType==='개인정보위 공개용 의결서'?'공개용 의결서 텍스트 요약':'공식 보도자료 요약'}</h4><p>{entry.record.summary}</p><ul>{entry.record.problems.map(text=><li key={text}>{text}</li>)}</ul></section>
           <section><h4>처분 결과</h4><p>{entry.record.dispositionSummary}</p><p className={styles.muted}>여러 기관·위반행위의 처분 총액을 현재 문항 하나의 제재 금액으로 해석하지 마세요.</p></section>
-          <section><h4>처분 당시 적용 법령·조문 확인 범위</h4><p>{entry.review.lawNote}</p><h4>현재 점검 조문과의 구분</h4><p>{entry.review.historicalNote}</p>{question.effectiveFrom && <p>이 문항의 개정 문구 시행일: {question.effectiveFrom}. 시행 전에는 준비평가로 구분합니다.</p>}</section>
+          <section><h4>처분 당시 적용 법령·조문 확인 범위</h4><p>{entry.review.lawNote}</p><h4>현재 점검 조문과의 구분</h4><p>{entry.review.historicalNote}</p>{question.effectiveFrom && <p>이 문항의 개정 문구 시행일: {question.effectiveFrom}. 시행 전에는 현재 의무의 미흡 평가에서 제외합니다.</p>}</section>
           <CaseSources entry={entry}/>
         </article>
       </>}

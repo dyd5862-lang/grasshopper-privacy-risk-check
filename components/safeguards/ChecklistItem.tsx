@@ -8,7 +8,7 @@ export function ChecklistItem({row,scope,onResponse,onScope}:{row:Evaluated;scop
  return <article id={q.id} className={`${styles.item} ${row.bucket==='readiness'?styles.preparation:''}`}>
  <span className={styles.badge}>{q.id}</span>{row.bucket==='readiness'&&<p className={styles.note}>{q.effectiveFrom} 시행 · 점검 기준일에는 적용되지 않아 현재 미흡 건수에 포함하지 않습니다.</p>}
  <span className={styles.badge}>{row.applicable==='UNKNOWN'?'적용조건 추가 확인':labels[row.answer]}</span>
- <p className={styles.meta}>{q.article}</p><h3>{q.question}</h3><p className={styles.meta}><b>적용조건</b> · {q.applicability}</p>
+ <p className={styles.meta}>{q.article.replace(/ \[(?:유예|2027)\]/g,'')}</p><h3>{q.question}</h3><p className={styles.meta}><b>적용조건</b> · {q.applicability}</p>
  {row.needsScope&&<div className={styles.note}><label className={styles.field}>이 문항의 대상·업무·예외 조건을 확인했나요?<select aria-label={`${q.id} 적용조건 확인`} value={scope?.value??'UNKNOWN'} onChange={e=>onScope({value:e.target.value as ScopeConfirmation['value'],reason:scope?.reason??'',evidenceRef:scope?.evidenceRef??'',context:''})}><option value="UNKNOWN">추가 확인</option><option value="YES">적용조건에 해당함</option><option value="NO">대상·업무 자체가 없어 비적용 (근거 필요)</option></select></label>
  <p>현재 실적이 없는 경우에도 절차·설정으로 준비상태를 확인하세요. 사전조건이 미확인이라면 이 선택만으로 적용 여부가 확정되지 않습니다.</p>
  {scope?.value==='NO'&&<div className={styles.grid}><label className={styles.field}>비적용 사유<input value={scope.reason} onChange={e=>onScope({...scope,reason:e.target.value})}/></label><label className={styles.field}>비적용 확인근거·내부 참조<input value={scope.evidenceRef} onChange={e=>onScope({...scope,evidenceRef:e.target.value})}/></label></div>}
