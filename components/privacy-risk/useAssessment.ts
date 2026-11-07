@@ -1,4 +1,5 @@
 "use client";
+import { encryptionConclusion } from '../../lib/privacy-risk/evaluation';
 
 import { useEffect,useMemo,useState } from "react";
 import type { CaseRecord } from "../../app/cases-data";
@@ -24,6 +25,7 @@ export function useAssessment() {
   const [expanded, setExpanded] = useState<number | null>(null);
   const [evidenceFor, setEvidenceFor] = useState<number | null>(null);
   const [detailFor, setDetailFor] = useState<number | null>(null);
+  const [originalSourceVersion,setOriginalSourceVersion] = useState("2026.11");
   const [guideFor, setGuideFor] = useState<number | null>(null);
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
@@ -46,6 +48,7 @@ export function useAssessment() {
     const frame = window.requestAnimationFrame(() => {
       const saved = loadAssessment(localStorage);
       if (saved) {
+        setOriginalSourceVersion(saved.originalSourceVersion??saved.sourceVersion??"2025.11");
         setProfile(saved.profile);
         setAnswers(saved.answers);
         setEvidence(saved.evidence);
@@ -58,8 +61,8 @@ export function useAssessment() {
 
   useEffect(() => {
     if (!hydrated) return;
-    saveAssessment(localStorage, { profile, answers, evidence, screen });
-  }, [profile, answers, evidence, screen, hydrated]);
+    saveAssessment(localStorage, { profile, answers, evidence, screen, originalSourceVersion });
+  }, [profile, answers, evidence, screen, hydrated, originalSourceVersion]);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -104,36 +107,11 @@ export function useAssessment() {
 
   const completed = applicableChecks.filter((item) => answers[item.id]).length;
   const progress = applicableChecks.length ? Math.round((completed / applicableChecks.length) * 100) : 0;
-  const targetStatus = useMemo(() => {
-    const hasResident = profile.identifiers.includes("주민등록번호");
-    const hasRiskId = profile.identifiers.some((id) => id !== "주민등록번호");
-    if (hasResident) {
-      return {
-        tone: "danger",
-        title: "주민등록번호는 별도 암호화 의무 대상입니다",
-        body: "주민등록번호는 위험도 분석 결과와 관계없이 암호화하여 안전하게 보관해야 합니다. 다른 고유식별정보가 있다면 그 정보에 대한 위험도 분석은 별도로 계속할 수 있습니다.",
-      };
-    }
-    if (!hasRiskId) {
-      return {
-        tone: "neutral",
-        title: "위험도 분석 대상 고유식별정보가 확인되지 않았습니다",
-        body: "여권번호·운전면허번호·외국인등록번호를 내부망에 저장하지 않는다면 이 안내서의 암호화 미적용 위험도 분석 대상은 아닙니다. 일반 안전조치 점검은 계속할 수 있습니다.",
-      };
-    }
-    if (profile.storage === "all") {
-      return {
-        tone: "success",
-        title: "모든 대상 정보를 암호화해 저장하고 있습니다",
-        body: "안내서상 암호화 적용 여부를 정하기 위한 위험도 분석 필요성은 낮습니다. 다만 암호 알고리즘과 키 관리의 적정성은 별도로 확인해야 합니다.",
-      };
-    }
-    return {
-      tone: "warning",
-      title: "위험도 분석 진행이 필요합니다",
-      body: "내부망에 주민등록번호 외 고유식별정보를 일부 또는 전부 암호화하지 않고 저장하는 경우입니다. 26개 보호조치와 증적을 확인하세요.",
-    };
-  }, [profile.identifiers, profile.storage]);
+  const targetStatus = useMemo(() => ({
+    tone: profile.identifiers.includes("주민등록번호") ? "danger" : "neutral",
+    title: "적용대상 및 암호화 기준 확인",
+    body: encryptionConclusion(profile, answers),
+  }), [profile, answers]);
 
   const counts = useMemo(() => {
     const base = { yes: 0, no: 0, unknown: 0, na: 0, evidenceMissing: 0 };
@@ -233,6 +211,7 @@ export function useAssessment() {
   const resetAll = () => {
     if (!window.confirm("입력한 기본정보, 답변과 증적 기록을 모두 지울까요?")) return;
     clearAssessment(localStorage);
+    setOriginalSourceVersion("2026.11");
     setProfile(initialProfile);
     setAnswers({});
     setEvidence({});
@@ -262,7 +241,7 @@ export function useAssessment() {
   };
 
   const exportData = () => {
-    const data = createResultData(profile, answers, evidence, applicableChecks);
+    const data = createResultData(profile, answers, evidence, applicableChecks, new Date(), originalSourceVersion);
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -276,6 +255,6 @@ export function useAssessment() {
   const activeGuideItem = guideFor ? checks.find((item) => item.id === guideFor) : null;
   const activeCaseListItem = caseListFor ? checks.find((item) => item.id === caseListFor) : null;
 
-  return { screen, setScreen, profile, setProfile, answers, setAnswers, evidence, setEvidence, expanded, setExpanded, evidenceFor, setEvidenceFor, detailFor, setDetailFor, guideFor, setGuideFor, filter, setFilter, query, setQuery, selectedCase, setSelectedCase, caseListFor, setCaseListFor, caseTopic, setCaseTopic, caseInstitution, setCaseInstitution, caseDisposition, setCaseDisposition, casePeriod, setCasePeriod, caseYear, setCaseYear, caseQuery, setCaseQuery, showItemIndex, setShowItemIndex, showReferences, setShowReferences, hydrated, setHydrated, readerPreferences, setReaderPreferences, readerReady, setReaderReady, isFullscreen, setIsFullscreen, applicableChecks, completed, progress, targetStatus, counts, evaluation, attentionItems, filteredChecks, activeCheck, filteredCases, casesForItem, openCases, startCheck, updateIdentifier, beginQuestions, setAnswer, goNextItem, addEvidence, resetAll, updateReaderPreference, resetReaderPreferences, toggleFullscreen, goResult, exportData, activeDetail, activeGuideItem, activeCaseListItem };
+  return { originalSourceVersion, encryptionResult: encryptionConclusion(profile, answers), screen, setScreen, profile, setProfile, answers, setAnswers, evidence, setEvidence, expanded, setExpanded, evidenceFor, setEvidenceFor, detailFor, setDetailFor, guideFor, setGuideFor, filter, setFilter, query, setQuery, selectedCase, setSelectedCase, caseListFor, setCaseListFor, caseTopic, setCaseTopic, caseInstitution, setCaseInstitution, caseDisposition, setCaseDisposition, casePeriod, setCasePeriod, caseYear, setCaseYear, caseQuery, setCaseQuery, showItemIndex, setShowItemIndex, showReferences, setShowReferences, hydrated, setHydrated, readerPreferences, setReaderPreferences, readerReady, setReaderReady, isFullscreen, setIsFullscreen, applicableChecks, completed, progress, targetStatus, counts, evaluation, attentionItems, filteredChecks, activeCheck, filteredCases, casesForItem, openCases, startCheck, updateIdentifier, beginQuestions, setAnswer, goNextItem, addEvidence, resetAll, updateReaderPreference, resetReaderPreferences, toggleFullscreen, goResult, exportData, activeDetail, activeGuideItem, activeCaseListItem };
 }
 export type AssessmentController = ReturnType<typeof useAssessment>;

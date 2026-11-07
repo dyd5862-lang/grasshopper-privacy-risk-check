@@ -82,7 +82,7 @@ export default function Home() {
 
       {selectedCase && <CaseModal record={selectedCase} onClose={() => setSelectedCase(null)} onOpenItem={(itemId) => { setSelectedCase(null); setScreen("check"); setExpanded(itemId); }} />}
 
-      <footer className="site-footer no-print"><div><BrandMark /><p><b>{serviceName}</b><br />개인정보 보호조치 자가점검 및 위험도 분석 지원 서비스</p></div><p>「개인정보의 안전성 확보조치 기준 안내서」 2025.11 기반<br />본 서비스 결과는 공식적인 법률 자문이나 행정처분 판단이 아닙니다.</p></footer>
+      <footer className="site-footer no-print"><div><BrandMark /><p><b>{serviceName}</b><br />개인정보 보호조치 자가점검 및 위험도 분석 지원 서비스</p></div><p>「개인정보의 안전성 확보조치 기준 안내서」 2026.11 기반<br />본 서비스 결과는 공식적인 법률 자문이나 행정처분 판단이 아닙니다.</p></footer>
     </main>
   );
 }

@@ -1,5 +1,5 @@
 import type { State, Answer } from './types';
-import { sourceVersion } from '../../data/safeguards/index';
+import { sourceVersion, legacySourceVersion } from '../../data/safeguards/index';
 export const storageKey='grasshopper-safeguards-check-v1';
 export function today(now=new Date()) { return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`; }
 export function initialState(date=today()): State {
@@ -7,8 +7,10 @@ export function initialState(date=today()): State {
 }
 export function parseState(raw:string): State {
  const p=JSON.parse(raw);
- if(p?.schemaVersion!==1 || p.sourceVersion!==sourceVersion)throw Error('저장된 점검 기준 버전이 다릅니다. 데이터를 보존하고 새 점검을 시작하거나 별도 검토하세요.');
+ if(p?.schemaVersion!==1 || ![sourceVersion,legacySourceVersion].includes(p.sourceVersion))throw Error('저장된 점검 기준 버전이 다릅니다. 데이터를 보존하고 새 점검을 시작하거나 별도 검토하세요.');
  const s=initialState();
+ if(p.sourceVersion===legacySourceVersion){s.migratedFrom=p.sourceVersion;s.previousAssessment=p;}
+ else if(typeof p.migratedFrom==='string' && p.previousAssessment && typeof p.previousAssessment==='object'){s.migratedFrom=p.migratedFrom;s.previousAssessment=p.previousAssessment;}
  for(const key of ['organization','systemName','fileName','date'] as const) if(typeof p.profile?.[key]==='string')s.profile[key]=p.profile[key];
  for(const key of ['facts','factNotes'] as const) for(const [k,v] of Object.entries(p[key]??{}))if(typeof v==='string')s[key][k]=v;
  const answers:Answer[]=['PASS','FAIL','NEEDS_REVIEW','NOT_APPLICABLE','UNANSWERED'];

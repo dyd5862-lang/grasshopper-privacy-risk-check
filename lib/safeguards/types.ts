@@ -10,6 +10,7 @@ export type Response = { answer: Answer; reason: string; evidenceRef: string; ch
 export type ScopeConfirmation = { value: Tri; reason: string; evidenceRef: string; context: string };
 export type State = {
   schemaVersion: 1; sourceVersion: string;
+  migratedFrom?: string; previousAssessment?: Record<string, unknown>;
   profile: { organization: string; systemName: string; fileName: string; date: string };
   facts: Record<string, string>; factNotes: Record<string, string>;
   responses: Record<string, Response>; scopes: Record<string, ScopeConfirmation>;

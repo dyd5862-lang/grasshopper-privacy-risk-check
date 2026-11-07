@@ -50,12 +50,12 @@ test('unanswered and excluded questions never produce failure guidance; raw and 
  row=answer(s,'N-01','PASS');assert.equal(caseAttention(row),null);
  s.facts.system='UNKNOWN';row=evaluate(q('N-01'),s);assert.equal(row.response.answer,'PASS');assert.match(caseAttention(row),/^시스템 판단:/);
 });
-test('report groups repeated cases, preserves readiness and excludes inactive risk module',()=>{
+test('report groups repeated cases and excludes not-yet-effective and inactive risk rows',()=>{
  const s=state();answer(s,'N-01','FAIL');answer(s,'N-04','NEEDS_REVIEW');answer(s,'R-20','FAIL');
  const rows=questions.map(q=>evaluate(q,s));const groups=groupAttentionCases(activeRows(rows,s));
  assert.equal(new Set(groups.map(g=>g.entry.record.id)).size,groups.length);
- const geps=groups.find(g=>g.entry.record.id==='geps-gangbuk-2026');assert.deepEqual(geps.items.map(i=>i.row.question.id),['N-01','N-04']);
- assert.equal(geps.items.find(i=>i.row.question.id==='N-04').row.bucket,'readiness');
+ const geps=groups.find(g=>g.entry.record.id==='geps-gangbuk-2026');assert.deepEqual(geps.items.map(i=>i.row.question.id),['N-01']);
+ assert.ok(!geps.items.some(i=>i.row.question.id==='N-04'));
  assert.ok(groups.every(g=>g.items.every(i=>i.row.question.id!=='R-20')));
 });
 test('case guidance leaves assessment, raw evidence, schema and export unchanged',()=>{
@@ -64,7 +64,7 @@ test('case guidance leaves assessment, raw evidence, schema and export unchanged
  const before=JSON.stringify({s,rows,report:createReport(s,rows,now)});
  for(const row of rows){relatedCases(row.question.id);caseAttention(row);}groupAttentionCases(activeRows(rows,s));
  assert.equal(JSON.stringify({s,rows,report:createReport(s,rows,now)}),before);
- assert.equal(createReport(s,rows).results.length,142);assert.equal(s.schemaVersion,1);
+ assert.equal(createReport(s,rows).results.length,146);assert.equal(s.schemaVersion,1);
 });
 test('review document is generated from the exact implementation mapping',()=>{
  execFileSync(process.execPath,['scripts/generate-safeguards-case-map.mjs','--check'],{cwd:new URL('../',import.meta.url),stdio:'pipe'});

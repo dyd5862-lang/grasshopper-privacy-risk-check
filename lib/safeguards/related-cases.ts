@@ -13,7 +13,7 @@ export function relatedCases(questionId: string) {
 }
 export type RelatedCase = ReturnType<typeof relatedCases>[number];
 export function caseAttention(row: Evaluated): string | null {
-  if (row.applicable === 'NO' || row.response.answer === 'UNANSWERED') return null;
+  if (row.bucket === 'readiness' || row.applicable === 'NO' || row.response.answer === 'UNANSWERED') return null;
   if (row.response.answer === 'FAIL') return '사용자 응답: 미흡';
   if (row.response.answer === 'NEEDS_REVIEW') return '사용자 응답: 추가 확인';
   if (row.answer === 'NEEDS_REVIEW') return '시스템 판단: 조건·시행일·근거 또는 이전 응답 재확인 필요';

@@ -26,6 +26,10 @@ export type Evidence = {
 };
 
 export type Profile = {
+  assessmentDate?: string;
+  subjectType?: "nonuser" | "user" | "unknown";
+  storageLocation?: "internal" | "internet" | "dmz" | "unknown";
+  dpia?: "yes" | "no" | "unknown";
   organization: string;
   organizationType: string;
   systemName: string;

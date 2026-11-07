@@ -56,6 +56,7 @@ export default function SafeguardsApp() {
  <div className={`${styles.title} ${styles.noPrint}`}><div><h1><small>메뚜기가 만든</small>개인정보 안전성 확보조치<br/>자가 점검 도구</h1><p>「개인정보의 안전성 확보조치 기준」에 따른 적용대상 확인 및 조문별 보호조치 자가점검</p></div><Image className={styles.mascot} src="/images/grasshopper-hero.webp" alt="메뚜기 점검 안내자" width={110} height={110}/></div>
  <p className={`${styles.note} ${styles.noPrint}`}><b>이 도구에는 실제 개인정보를 입력하지 마십시오.</b><br/>증적은 기관 내부에서 확인하고 증적명·내부 참조·확인일만 기록하세요. 비밀번호·인증토큰·암호키를 입력하지 마세요. 입력값은 이 브라우저에만 저장됩니다.</p>
  {!ready?<p>기기에 저장한 점검을 확인하고 있습니다…</p>:<>
+ {state.migratedFrom&&<p className={styles.warning} role="status">이전 기준({state.migratedFrom})의 원본·답변은 보존했습니다. 현재 2026년 기준으로 다시 점검하며 이전 응답은 재확인이 필요합니다. 결과 데이터에는 이전 원본도 함께 저장됩니다.</p>}
  <nav className={`${styles.steps} ${styles.noPrint}`} aria-label="안전성 확보조치 점검 단계">{([['profile','01 대상 확인'],['check','02 조문별 점검'],['result','03 결과보고서']] as const).map(([key,label])=><button key={key} aria-current={step===key?'step':undefined} onClick={()=>changeStep(key)}>{label}</button>)}</nav>
  {!validDate(state.profile.date)&&<p className={styles.error} role="alert">유효한 점검일을 입력하세요. 시행시점을 판단할 수 없어 결과를 확정할 수 없습니다.</p>}
  <div className={styles.noPrint}>
