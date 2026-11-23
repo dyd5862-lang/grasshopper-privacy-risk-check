@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
-    "test:data": "node --test tests/data-integrity.test.mjs",
+    "test:data": "node --test tests/data-integrity.test.mjs tests/ai-hacking-data.test.mjs",
     "test:render": "node --test tests/integration/next-rendered-html.test.mjs"
   },
   "dependencies": {

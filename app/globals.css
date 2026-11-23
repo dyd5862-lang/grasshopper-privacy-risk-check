@@ -864,7 +864,7 @@ html[data-theme="dark"] .case-badges > .decision-badge { background: #453a20; co
   .print-report footer { border-top: 1px solid #9aa; margin-top: 24px; padding-top: 10px; color: #566; font-size: 7.5pt; line-height: 1.55; }
 }
 
-/* Common landing page: separate from both assessment state machines. */
+/* Common landing page */
 .home-shell { line-height: var(--reader-line-height); }
 .home-header { padding: 20px max(24px, calc((100vw - 1180px) / 2)); display:flex; justify-content:space-between; gap:24px; align-items:center; border-bottom:1px solid var(--line); }
 .home-header nav { display:flex; flex-wrap:wrap; gap:16px 28px; font-size:calc(14px + var(--reader-text-delta)); font-weight:700; }
@@ -877,7 +877,7 @@ html[data-theme="dark"] .case-badges > .decision-badge { background: #453a20; co
 .home-lead { color:var(--ink-2); font-size:calc(17px + var(--reader-text-delta)); }
 .home-tools, .home-usage { scroll-margin-top:24px; }
 .home-tools > h2 { font-size:calc(19px + var(--reader-text-delta)); margin:0 0 20px; }
-.home-card-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.home-card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%, 280px),1fr)); gap:24px; }
 .home-source-status { margin-top:16px; color:var(--muted); font-size:calc(13px + var(--reader-text-delta)); line-height:1.6; overflow-wrap:anywhere; }
 .home-source-status p { margin:3px 0; }
 .home-tool-card { display:flex; flex-direction:column; padding:30px; border:1px solid var(--line); border-radius:20px; background:var(--paper); box-shadow:var(--shadow); }
