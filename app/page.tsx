@@ -26,7 +26,7 @@ export default function Home() {
         <div className="home-card-grid">
           <article className="home-tool-card"><span className="home-card-label">위험과 보호조치 확인</span><h3>개인정보 위험도 분석<br/>자가 점검 도구</h3><p>개인정보 처리 현황을 바탕으로 위험요인과 필요한 보호조치를 점검합니다.</p><p className="home-choice">개인정보 처리에 따른 위험과 보호조치의 적정성을 살펴보고 싶을 때</p><Link className="home-start" href="/risk">위험도 분석 시작하기 <span aria-hidden="true">→</span></Link></article>
           <article className="home-tool-card"><span className="home-card-label">조문별 이행 상태 확인</span><h3>개인정보 안전성 확보조치<br/>자가 점검 도구</h3><p>「개인정보의 안전성 확보조치 기준」에 따른 보호조치 이행 여부를 점검합니다.</p><p className="home-choice">기준의 조문별로 우리 기관·사업자의 이행 상태를 확인하고 싶을 때</p><Link className="home-start" href="/safeguards">안전성 확보조치 점검 시작하기 <span aria-hidden="true">→</span></Link></article>
-          <article className="home-tool-card"><span className="home-card-label">보안 취약점과 유출 예방</span><h3>AI 해킹 관련 점검 도구</h3><p>AI 악용 해킹 및 Java·PHP 등 보안 취약점으로 인한 개인정보 유출 위험을 사전에 점검합니다.</p><p className="home-choice">정보자산, API, DB 접근권한과 대량반출 방지조치를 확인하고 싶을 때</p><Link className="home-start" href="/ai-hacking">AI 해킹 예방 점검 시작하기</Link></article>
+          <article className="home-tool-card"><span className="home-card-label">보안 취약점과 유출 예방</span><h3>AI 해킹 관련 점검 도구</h3><p>AI 악용 해킹 및 Java·PHP 등 보안 취약점으로 인한 개인정보 유출 위험을 사전에 점검합니다.</p><p className="home-choice">정보자산, API, DB 접근권한과 대량반출 방지조치를 확인하고 싶을 때</p><Link className="home-start" href="/ai-hacking">AI 해킹 예방 점검 시작하기 <span aria-hidden="true">→</span></Link></article>
         </div>
         <div className="home-source-status" aria-label="점검 도구 업데이트">
           <p>적용 안내서: 개인정보의 안전성 확보조치 기준 안내서(2026.11.)<br/>적용 고시: 개인정보보호위원회 고시 제2026-9호</p>
