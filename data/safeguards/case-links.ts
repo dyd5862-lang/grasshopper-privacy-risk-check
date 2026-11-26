@@ -1,10 +1,10 @@
 // Reviewed mappings only. Case bodies and URLs remain in app/cases-data.ts and app/decision-data.ts.
-export type CaseLink = { questionId: string; caseId: string; relevance: 'direct' | 'reference'; reason: string; checkPoint: string };
+export type CaseLink = { questionId: string; caseId: string; relevance: 'direct' | 'substantial' | 'reference'; reason: string; checkPoint: string };
 export type CaseReview = { checkedAt: string; decisionDate: string; sourceLocator: string; lawNote: string; historicalNote: string };
 export type DecisionReview = { listingStatus: 'confirmed' | 'unavailable'; identityStatus: 'filename-date' | 'unconfirmed'; bodyStatus: 'unavailable' | 'text-only'; pdfStatus: 'unavailable'; checkedAt: string; note: string };
 export const caseReviews: Record<string, CaseReview> = {
-  "jenertec-2026-217-390": { checkedAt: "2026-11-01", decisionDate: "2026-09-09", sourceLocator: "국가법령정보센터 ppc ID 10947: 주문·Ⅱ.3·Ⅲ.2·Ⅳ·Ⅴ (이미지 표 미확인)", lawNote: "당시 보호법 제29조·제34조, 2023-6호 제6조제1항·제7조제1항·제8조제1항. 현재 문항 대응과 당시 조문을 구분합니다.", historicalNote: "작성일 2026-09-18은 최초 공개일로 확정하지 않습니다. 의결서 텍스트만 확인했으며 이미지 표·PDF/HWP 원문 파일은 미확인입니다." },
-  "sbridge-2026-217-391": { checkedAt: "2026-11-01", decisionDate: "2026-09-09", sourceLocator: "국가법령정보센터 ppc ID 10941: 주문·Ⅱ.3·Ⅲ.2·Ⅳ·Ⅴ (이미지 표 미확인)", lawNote: "구법 제29조·구 시행령 제48조의2, 2021-3호 기술적·관리적 보호조치 기준 제4조제5항·제9항·제5조제1항. 현행 기준 제6조와 사실관계를 대응합니다.", historicalNote: "2023년 8월 행위에 현재 고시를 소급하지 않습니다. 위원회 홈페이지 공표이며 사업자 공표명령은 아닙니다. 이미지 표·PDF/HWP 파일은 미확인입니다." },
+  "jenertec-2026-217-390": { checkedAt: "2026-11-24", decisionDate: "2026-09-09", sourceLocator: "국가법령정보센터 ppc ID 10947: 주문·Ⅱ.3·Ⅲ.2·Ⅳ·Ⅴ (이미지 표 미확인)", lawNote: "당시 보호법 제29조·제34조, 2023-6호 제6조제1항·제7조제1항·제8조제1항. 현재 문항 대응과 당시 조문을 구분합니다.", historicalNote: "작성일 2026-09-18은 최초 공개일로 확정하지 않습니다. 의결서 텍스트만 확인했으며 이미지 표·PDF/HWP 원문 파일은 미확인입니다." },
+  "sbridge-2026-217-391": { checkedAt: "2026-11-24", decisionDate: "2026-09-09", sourceLocator: "국가법령정보센터 ppc ID 10941: 주문·Ⅱ.3·Ⅲ.2·Ⅳ·Ⅴ (이미지 표 미확인)", lawNote: "구법 제29조·구 시행령 제48조의2, 2021-3호 기술적·관리적 보호조치 기준 제4조제5항·제9항·제5조제1항. 현행 기준 제6조와 사실관계를 대응합니다.", historicalNote: "2023년 8월 행위에 현재 고시를 소급하지 않습니다. 위원회 홈페이지 공표이며 사업자 공표명령은 아닙니다. 이미지 표·PDF/HWP 파일은 미확인입니다." },
   "daekyo-2026-10": {
     checkedAt: "2026-11-01", decisionDate: "2026-10-28",
     sourceLocator: "HTML 본문의 대교 조사 결과·처분 문단(첨부 본문 미확인)",
@@ -161,6 +161,15 @@ export const decisionReviews: Record<string, DecisionReview> = {
   }
 };
 export const caseLinks: CaseLink[] = [
+  {"questionId": "L-03", "caseId": "jenertec-2026-217-390", "relevance": "direct", "reason": "취급자의 시스템 접속기록을 1년 이상 보관하지 않아 당시 기준 제8조제1항 위반을 인정했다.", "checkPoint": "일반 보관 대상의 보관기간을 확인하세요."},
+  {"questionId": "M-15", "caseId": "jenertec-2026-217-390", "relevance": "substantial", "reason": "유출 통지를 포함한 대응체계를 마련하라는 시정명령이 있었다.", "checkPoint": "사고 인지 시 통지·신고 책임과 절차를 계획에 반영했는지 확인하세요."},
+  {"questionId": "R-02", "caseId": "jenertec-2026-217-390", "relevance": "substantial", "reason": "통지 지연 후 유출사고 대응체계 마련을 명령했다. 부록 평가 대상 여부는 확인되지 않았다.", "checkPoint": "사고 인지부터 통지까지 책임과 절차를 확인하세요."},
+  {"questionId": "R-06", "caseId": "jenertec-2026-217-390", "relevance": "substantial", "reason": "방화벽이 국내 IP 전체에 접근을 허용했다. 부록의 평가조건은 별도로 판단한다.", "checkPoint": "실제 허용한 IP가 인가된 대상인지 확인하세요."},
+  {"questionId": "R-12", "caseId": "jenertec-2026-217-390", "relevance": "substantial", "reason": "DB 관리 프로그램에 IP 제한이 없어 외부인이 접속할 수 있었다.", "checkPoint": "DB에 연결하는 관리 도구에도 접근을 제한하세요."},
+  {"questionId": "L-03", "caseId": "sbridge-2026-217-391", "relevance": "direct", "reason": "회원 DB 취급자의 접속기록을 1년간 보관하지 않아 구 고시 제5조제1항 위반을 인정했다.", "checkPoint": "접속기록이 보관기간에 걸쳐 조회되는지 확인하세요."},
+  {"questionId": "M-26", "caseId": "sbridge-2026-217-391", "relevance": "direct", "reason": "웹의 파일 업로드 취약점을 점검하고 개선하는 조치를 소홀히 했다.", "checkPoint": "확인한 웹 취약점의 개선 여부를 점검하세요."},
+  {"questionId": "R-08", "caseId": "sbridge-2026-217-391", "relevance": "substantial", "reason": "웹서버 접속 IP를 다시 분석하는 침입 탐지·차단 운영을 소홀히 했다.", "checkPoint": "서버 경보의 탐지 및 후속 조치를 확인하세요."},
+  {"questionId": "R-25", "caseId": "sbridge-2026-217-391", "relevance": "substantial", "reason": "파일 업로드 취약점의 점검·개선 미흡이 확인됐다. 부록 문항의 연간 주기를 당시 처분 근거로 해석하지 않는다.", "checkPoint": "웹 취약점 진단 후 보완이 완료됐는지 확인하세요."},
   { questionId: "N-01", caseId: "jenertec-2026-217-390", relevance: "direct", reason: "웹·DB서버와 DB 관리 프로그램의 IP 접근통제 미흡을 의결서 텍스트에서 확인.", checkPoint: "DB 관리 프로그램까지 허용 IP를 제한하는지 확인하세요." },
   { questionId: "E-01", caseId: "jenertec-2026-217-390", relevance: "direct", reason: "이용자 비밀번호를 평문으로 저장한 사실과 당시 제7조제1항 위반 판단 확인.", checkPoint: "현행 문항의 일방향 비밀번호 저장 방식과 실제 구현을 확인하세요." },
   { questionId: "N-02", caseId: "sbridge-2026-217-391", relevance: "direct", reason: "웹서버 접속 IP 재분석 등 악성행위 탐지·차단 운영 미흡 확인.", checkPoint: "접속 IP 분석과 경보 후속조치가 이루어지는지 확인하세요." },

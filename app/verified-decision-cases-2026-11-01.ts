@@ -2,7 +2,7 @@ import type { CaseRecord } from './cases-data';
 
 // Official PIPC attachment listing + National Law Information Center text.
 // Embedded image tables and downloadable PDF/HWP bytes remain unverified.
-export const decisionSource20260710 = 'https://pipc.go.kr/np/default/agenda.do?fromDt=&idxId=2026-0710&insttDivCdNm=&insttNms=&isPre=&mCode=E030010000&mrtlCd=&op=view&page=5&processCdNm=&schStr=&toDt=';
+export const decisionSource20260710 = 'https://pipc.go.kr/np/default/agenda.do?fromDt=&idxId=2026-0710&insttDivCdNm=&insttNms=&isPre=&mCode=E030010000&mrtlCd=&op=view&page=4&processCdNm=&schStr=&toDt=';
 const reviewScope = '위원회 게시물 작성일은 2026-09-18, 의결일은 2026-09-09입니다. 작성일을 최초 공개일로 확정하지 않습니다. 국가법령정보센터의 의결서 텍스트 중 주문·행위사실·위법성 판단·결론을 확인했습니다. 이미지 표와 PDF/HWP 파일 자체는 미확인이며 아래 설명은 확인한 텍스트 범위에 한정합니다.';
 export const decisionCases20261101: CaseRecord[] = [
   {

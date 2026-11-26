@@ -1,14 +1,17 @@
 import { areaKeys, areas, labels } from "../../lib/ai-hacking/model";
 import type { Answer, Area, Question, Row, Status } from "../../lib/ai-hacking/model";
 import { advisories, passages, sources } from "../../lib/ai-hacking/sources";
+import { materialLinks, relatedMaterials } from "../../lib/ai-hacking/related-materials";
 import { reasonLimit } from "../../lib/ai-hacking/storage";
 import styles from "./assessment.module.css";
 
 const choices: Status[] = ["pass", "fail", "review", "na", "pending"];
 
 function QuestionHelp({ q }: { q: Question }) {
+  const sourceIds = [...new Set(q.refs.map(key => passages[key].source))];
+  const cases = materialLinks.filter(link => link.questionIds.includes(q.id));
   return <details className={styles.details}>
-    <summary>확인 방법·판단 기준·보도자료 근거</summary>
+    <summary>확인 방법·판단 기준·공식 근거자료</summary>
     <div className={styles.helpBody}>
       <dl className={styles.definition}>
         <dt>점검 목적과 위험</dt><dd>{q.risk}</dd>
@@ -18,12 +21,24 @@ function QuestionHelp({ q }: { q: Question }) {
         <dt>개선조치</dt><dd>{q.action}</dd>
         <dt>적용 범위</dt><dd>{q.target}. {q.na}</dd>
       </dl>
-      <h4>개인정보위 보도자료 근거</h4>
-      <ul className={styles.sources}>{q.refs.map(key => {
-        const p = passages[key], s = sources[p.source];
-        return <li key={key}><a href={s.url} target="_blank" rel="noreferrer">{p.source} · {s.title}</a>
-          <small>{s.date} · {p.location}</small><p>{p.summary}</p></li>;
+      <h4>예방 권고 보도자료</h4>
+      <ul className={styles.sources}>{sourceIds.map(id => {
+        const s = sources[id];
+        return <li key={id}><a href={s.url} target="_blank" rel="noreferrer">{id} · {s.title}</a>
+          <small>{s.date}</small>{q.refs.filter(ref => passages[ref].source === id).map(ref =>
+            <p key={ref}>{passages[ref].location} · {passages[ref].summary}</p>)}</li>;
       })}</ul>
+      {(["보도자료", "공개용 의결서"] as const).map(kind => {
+        const matches = cases.filter(link => relatedMaterials[link.source].kind === kind);
+        return matches.length > 0 && <div key={kind}>
+          <h4>{kind === "보도자료" ? "관련 보도자료" : kind}</h4>
+          <ul className={styles.sources}>{matches.map(link => {
+            const source = relatedMaterials[link.source];
+            return <li key={source.id}><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>
+              <small>{source.label} · {source.date} · {link.relevance}</small>
+              <p>{link.location} · {link.reason}</p></li>;
+          })}</ul></div>;
+      })}
       {q.extension && <p className={styles.note}><b>실무 보완</b> {q.extension}</p>}
       {q.notices && <><h4>공식 보안공지</h4><ul className={styles.sources}>{q.notices.map(key =>
         <li key={key}><a href={advisories[key].url} target="_blank" rel="noreferrer">{advisories[key].title}</a></li>)}</ul>
