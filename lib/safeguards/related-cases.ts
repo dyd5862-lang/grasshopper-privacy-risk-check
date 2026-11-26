@@ -4,12 +4,13 @@ import { caseLinks, caseReviews, decisionReviews } from '../../data/safeguards/c
 import type { Evaluated } from './types';
 
 const records = new Map(caseRecords.map(record => [record.id, record]));
-export const relevanceLabels = {direct:'직접 관련', reference:'참고 사례'};
+export const relevanceLabels = {direct:'직접 관련', substantial:'실질 관련', reference:'참고 사례'};
+const relevanceOrder = {direct: 0, substantial: 1, reference: 2};
 export function relatedCases(questionId: string) {
   return caseLinks.filter(link => link.questionId === questionId).map(link => ({
     link, record: records.get(link.caseId)!, review: caseReviews[link.caseId],
     decisions: (publicDecisionsByCase[link.caseId] ?? []).map(document => ({document, review: decisionReviews[document.decisionNo]})),
-  })).sort((a,b) => Number(b.link.relevance === 'direct') - Number(a.link.relevance === 'direct') || b.review.decisionDate.localeCompare(a.review.decisionDate));
+  })).sort((a,b) => relevanceOrder[a.link.relevance] - relevanceOrder[b.link.relevance] || b.review.decisionDate.localeCompare(a.review.decisionDate));
 }
 export type RelatedCase = ReturnType<typeof relatedCases>[number];
 export function caseAttention(row: Evaluated): string | null {

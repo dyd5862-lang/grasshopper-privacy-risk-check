@@ -76,3 +76,25 @@ if (directory) test("all three supplied originals match their fingerprints, titl
     for (const [ref, anchor] of Object.entries(meta.anchors)) assert.ok(body.includes(compact(anchor)), id + " " + ref);
   }
 });
+
+test("every reviewed case points to a distinct real question and an identified official document", async () => {
+  const { materialLinks, relatedMaterials } = await load("related-materials");
+  const items = new Set(questions.map(q => q.id));
+  const pairs = new Set();
+  const linked = new Set();
+  for (const link of materialLinks) {
+    const source = relatedMaterials[link.source];
+    assert.ok(source.title && /^https:\/\/(www\.)?pipc\.go\.kr\//.test(source.url));
+    assert.ok(["직접 관련", "실질 관련"].includes(link.relevance));
+    assert.ok(link.reason && link.location && link.questionIds.length);
+    if (source.kind === "공개용 의결서") assert.match(source.label, /^제\d{4}-\d{3}-\d{3}호$/);
+    for (const id of link.questionIds) {
+      assert.ok(items.has(id), id);
+      const pair = id + "/" + source.id;
+      assert.ok(!pairs.has(pair), pair);
+      pairs.add(pair);
+    }
+    linked.add(link.source);
+  }
+  assert.equal(linked.size, Object.keys(relatedMaterials).length);
+});

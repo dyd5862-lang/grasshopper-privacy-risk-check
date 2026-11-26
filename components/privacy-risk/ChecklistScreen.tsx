@@ -4,6 +4,7 @@ import { officialCaseSearchUrl } from "../../app/cases-data";
 import { answerOptions,getProgressMessage } from "../../lib/privacy-risk/constants";
 import { privacyLawReaderArticleLinks,privacyNoticeArticleLinks } from "../../lib/privacy-risk/legal-links";
 import type { Filter } from "../../lib/privacy-risk/types";
+import { riskReviewedLinks } from "../../lib/privacy-risk/reviewed-links";
 import { MiniIcon } from "./Icons";
 import type { AssessmentController } from "./useAssessment";
 
@@ -97,7 +98,7 @@ export function ChecklistScreen({ setScreen, profile, answers, evidence, setExpa
                 <section><span>📖 안내서</span><b>안전성 확보조치 기준 안내서</b><small>2026.11 개정본</small><button onClick={() => setGuideFor(activeCheck.id)}>{activeCheck.page} 바로 보기 <MiniIcon name="arrow" /></button></section>
                 <section><span>📎 필요한 증적자료</span><ul>{activeCheck.evidence.slice(0, 3).map((item) => <li key={item}>{item}</li>)}</ul></section>
                 <section><span>📋 조사·처분 사례</span><b>{casesForItem(activeCheck.id).length > 0 ? `${casesForItem(activeCheck.id).length}건 직접 연결` : "직접 연결 사례 없음"}</b><button onClick={() => casesForItem(activeCheck.id).length ? setCaseListFor(activeCheck.id) : openCases(activeCheck.id)}>전체 사례 확인 <MiniIcon name="arrow" /></button></section>
-                <section><span>📰 개인정보위 보도자료</span><a href={officialCaseSearchUrl(activeCheck.category)} target="_blank" rel="noreferrer">공식자료 최신 검색 <MiniIcon name="arrow" /></a></section>
+                <section><span>📰 개인정보위 공식자료</span>{riskReviewedLinks.some(link => link.itemId === activeCheck.id) && <button onClick={() => setDetailFor(activeCheck.id)}>문항별 보도자료·의결서 보기 <MiniIcon name="arrow" /></button>}<a href={officialCaseSearchUrl(activeCheck.category)} target="_blank" rel="noreferrer">공식자료 최신 검색 <MiniIcon name="arrow" /></a></section>
                 <button className="secondary-button full" onClick={() => setDetailFor(activeCheck.id)}>해설과 근거 전체 보기</button>
               </div>
             </aside>}

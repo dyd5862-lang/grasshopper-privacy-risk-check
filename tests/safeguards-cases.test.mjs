@@ -21,11 +21,11 @@ test('all reviewed links reference real IDs and unique question/case pairs',()=>
  for(const link of caseLinks){
   assert.ok(q(link.questionId),link.questionId);assert.ok(caseRecords.some(c=>c.id===link.caseId),link.caseId);
   const pair=link.questionId+':'+link.caseId;assert.ok(!pairs.has(pair),pair);pairs.add(pair);
-  assert.ok(['direct','reference'].includes(link.relevance));assert.ok(link.reason&&link.checkPoint);
+  assert.ok(['direct','substantial','reference'].includes(link.relevance));assert.ok(link.reason&&link.checkPoint);
   const review=caseReviews[link.caseId];assert.ok(review.sourceLocator&&review.lawNote&&review.historicalNote&&review.decisionDate);
  }
- assert.deepEqual([caseLinks.length,new Set(caseLinks.map(l=>l.questionId)).size,new Set(caseLinks.map(l=>l.caseId)).size],[53,32,10]);
- assert.equal(caseLinks.filter(l=>l.relevance==='direct').length,39);
+ assert.deepEqual([caseLinks.length,new Set(caseLinks.map(l=>l.questionId)).size,new Set(caseLinks.map(l=>l.caseId)).size],[62,37,10]);
+ assert.equal(caseLinks.filter(l=>l.relevance==='direct').length,42);
 });
 test('case retrieval uses original records/documents, preserves all documents and prioritizes direct links',()=>{
  for(const question of questions){
@@ -68,4 +68,33 @@ test('case guidance leaves assessment, raw evidence, schema and export unchanged
 });
 test('review document is generated from the exact implementation mapping',()=>{
  execFileSync(process.execPath,['scripts/generate-safeguards-case-map.mjs','--check'],{cwd:new URL('../',import.meta.url),stdio:'pipe'});
+});
+
+test('press evidence resolves to official publications for unique checklist items',async()=>{
+ const {reviewedPress}=await load('../data/pipc/press-2026-11-24.ts');
+ const {safeguardPressLinks}=await load('../data/safeguards/press-links.ts');
+ const pairs=new Set();
+ for(const link of safeguardPressLinks){
+  const source=reviewedPress[link.nttId];
+  assert.ok(q(link.questionId));
+  assert.equal(new URL(source.url).searchParams.get('nttId'),link.nttId);
+  assert.ok(link.location && link.reason);
+  const pair=link.questionId+' '+source.id;
+  assert.ok(!pairs.has(pair),pair);
+  pairs.add(pair);
+ }
+});
+
+test('recent decisions use identified official texts and valid question links',async()=>{
+ const {reviewedDecisions}=await load('../data/pipc/decisions-2026-11-24.ts');
+ const {safeguardDecisionLinks}=await load('../data/safeguards/decision-links.ts');
+ const pairs=new Set();
+ for(const link of safeguardDecisionLinks){
+  const source=reviewedDecisions[link.decision];
+  assert.ok(q(link.questionId) && source.officialTextId && source.decisionNo);
+  assert.ok(link.location && link.reason);
+  const pair=link.questionId+' '+source.id;
+  assert.ok(!pairs.has(pair),pair);
+  pairs.add(pair);
+ }
 });

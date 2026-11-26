@@ -1,16 +1,14 @@
+import { reviewedPress } from "../../data/pipc/press-2026-11-24";
+
+function pressSource(key: keyof typeof reviewedPress) {
+  const source = reviewedPress[key];
+  return { ...source, date: source.date.replaceAll("-", ". ") + "." };
+}
+
 export const sources = {
-  S1: {
-    date: "2026. 10. 19.", title: "개인정보 보호, 생활 속 실천과 사전 점검이 중요합니다",
-    url: "https://pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS074&mCode=C020010000&nttId=12586",
-  },
-  S2: {
-    date: "2026. 10. 22.", title: "개인정보위, PHP 보안 취약점 관련 개인정보 유출 예방조치 당부",
-    url: "https://pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS074&mCode=&nttId=12588",
-  },
-  S3: {
-    date: "2026. 11. 18.", title: "개인정보위, Java 보안 취약점 관련 개인정보 대량 유출 예방조치 당부",
-    url: "https://pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS074&mCode=C010010000&nttId=12660",
-  },
+  S1: pressSource("12586"),
+  S2: pressSource("12588"),
+  S3: pressSource("12660"),
 } as const;
 
 type Passage = { source: keyof typeof sources; location: string; summary: string };
