@@ -15,7 +15,7 @@ test('both tools retain their own titles and navigation back to the common home'
 
 test('third tool is reachable, shows the production release date and provides local-only assessment entry', () => {
  const home = html('index'), ai = html('ai-hacking');
- for (const label of ['AI 해킹 예방 점검 시작하기','<time dateTime="2026-11-23">2026. 11. 23.</time>','개인정보의 안전성 확보조치 기준 안내서(2026.11.)']) assert.ok(home.includes(label),label);
+ for (const label of ['AI 해킹 예방 점검 시작하기','<time dateTime="2026-11-26">2026. 11. 26.</time>','개인정보의 안전성 확보조치 기준 안내서(2026.11.)']) assert.ok(home.includes(label),label);
  for (const page of ['index','risk','safeguards','ai-hacking']) assert.ok(html(page).includes('href="/ai-hacking"'),page);
  for (const label of ['AI 해킹 관련 점검 도구','기본정보 입력하기','href="/"','href="/risk"','href="/safeguards"']) assert.ok(ai.includes(label),label);
 });
