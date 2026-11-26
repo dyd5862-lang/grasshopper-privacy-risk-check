@@ -30,7 +30,6 @@ export default function Home() {
         </div>
         <div className="home-source-status" aria-label="점검 도구 업데이트">
           <p>적용 안내서: 개인정보의 안전성 확보조치 기준 안내서(2026.11.)<br/>적용 고시: 개인정보보호위원회 고시 제2026-9호</p>
-          <p>공식 조사·처분 사례 <b>113건</b> · 이번 문항별 공식자료 연결 <b>174건 추가</b></p>
             <p>점검 도구 업데이트 : <time dateTime="2026-11-26">2026. 11. 26.</time></p>
         </div>
       </section>
