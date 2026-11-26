@@ -30,7 +30,8 @@ export default function Home() {
         </div>
         <div className="home-source-status" aria-label="점검 도구 업데이트">
           <p>적용 안내서: 개인정보의 안전성 확보조치 기준 안내서(2026.11.)<br/>적용 고시: 개인정보보호위원회 고시 제2026-9호</p>
-          <p>점검 도구 업데이트 : <time dateTime="2026-11-23">2026. 11. 23.</time></p>
+          <p>공식 조사·처분 사례 <b>113건</b> · 이번 문항별 공식자료 연결 <b>174건 추가</b></p>
+            <p>점검 도구 업데이트 : <time dateTime="2026-11-26">2026. 11. 26.</time></p>
         </div>
       </section>
       <aside className="home-help" aria-labelledby="help-title"><span className="home-help-icon" aria-hidden="true">🦗</span><div><p className="section-kicker">메뚜기 도움말</p><h2 id="help-title">어떤 점검부터 시작할까요?</h2><p>개인정보 처리에 따른 위험과 필요한 보호조치를 살펴보려면 <b>‘위험도 분석’</b>을, 안전성 확보조치 기준의 조문별 이행 여부를 확인하려면 <b>‘안전성 확보조치 점검’</b>을 선택하세요.</p><p>Java·PHP 보안 업데이트, 연계 API와 DB의 접근통제를 확인하려면 <b>‘AI 해킹 관련 점검 도구’</b>에서 시작하세요.</p></div></aside>
